@@ -1,0 +1,11 @@
+mambu_fineract:
+  target: dev
+  outputs:
+    dev:
+      type: mysql
+      host: host.docker.internal
+      user: root
+      pass: mysql
+      dbname: carbon
+      port: 3306
+      schema: carbon
