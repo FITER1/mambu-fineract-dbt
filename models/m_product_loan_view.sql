@@ -1,7 +1,6 @@
 WITH source AS (
     SELECT
         lp.ENCODEDKEY as external_id,
-        lp.ID as id,
         {{ decode_base64("PRODUCTNAME") }} AS name,
         SUBSTRING({{ decode_base64("PRODUCTNAME") }}, 0, 3) AS short_name,
         {{ decode_base64("CURRENCYCODE") }} AS currency_code,
@@ -37,7 +36,7 @@ WITH source AS (
 )
 
 SELECT
-    id,
+    cast(NULL as int8) as id,
     short_name,
     currency_code,
     cast(0 as int4) as currency_digits,
