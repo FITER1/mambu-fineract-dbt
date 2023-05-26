@@ -1,5 +1,6 @@
 WITH source AS (
     SELECT
+        lp.ID,
         lp.ENCODEDKEY as external_id,
         PRODUCTNAME AS name,
         SUBSTRING(ID, 0, 3) AS short_name,
