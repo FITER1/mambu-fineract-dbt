@@ -82,7 +82,7 @@ SELECT
     cast(1 as int4) as amortization_method_enum,
     accounting_type,
     cast(1 as int4) as loan_transaction_strategy_id,
-    external_id,
+    {{ decode_base64("external_id") }} external_id,
     false as include_in_borrower_cycle,
     false as use_borrower_cycle,
     cast(NULL as date) as start_date,
