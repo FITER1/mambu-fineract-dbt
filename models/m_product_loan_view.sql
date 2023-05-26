@@ -31,7 +31,7 @@ WITH source AS (
         pas.DEFAULTTOLERANCEPERIOD AS grace_on_arrears_ageing
     FROM {{ ref('loanproduct') }} as lp JOIN {{ ref('interestproductsettings') }} as ips
     ON lp.INTERESTRATESETTINGSKEY = ips.ENCODEDKEY
-    JOIN {{ ref('productarrearssettings') }} pas
+    JOIN {{ ref('productarrearssettings') }} as pas
     ON lp.ARREARSSETTINGSKEY = pas.ENCODEDKEY
 )
 
