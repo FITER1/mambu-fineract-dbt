@@ -47,7 +47,7 @@ SELECT
     max_principal_amount,
     cast(NULL as numeric(19,6)) as arrearstolerance_amount,
     name,
-    description
+    description,
     cast(NULL as int8) as fund_id,
     false as is_linked_to_floating_interest_rates,
     false as allow_variabe_installments,
