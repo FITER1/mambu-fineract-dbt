@@ -29,7 +29,7 @@ WITH source AS (
             ELSE 0
         END as accounting_type,
         pas.DEFAULTTOLERANCEPERIOD AS grace_on_arrears_ageing
-    FROM loanproduct lp JOIN interestproductsettings ips
+    FROM loanproduct as lp JOIN interestproductsettings as ips
     ON lp.INTERESTRATESETTINGSKEY = ips.ENCODEDKEY
     JOIN productarrearssettings pas
     ON lp.ARREARSSETTINGSKEY = pas.ENCODEDKEY
