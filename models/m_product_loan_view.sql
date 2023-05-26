@@ -49,8 +49,8 @@ WITH source AS (
 
 SELECT
     cast(NULL as int8) as id,
-    short_name,
-    currency_code,
+    SUBSTRING({{ decode_base64("name") }}, 0, 3) AS short_name,
+    {{ decode_base64("currency_code") }} currency_code,
     cast(0 as int4) as currency_digits,
     cast(1 as int4) as currency_multiplesof,
     principal_amount,
@@ -58,7 +58,7 @@ SELECT
     max_principal_amount,
     cast(NULL as numeric(19,6)) as arrearstolerance_amount,
     {{ decode_base64("name") }} name,
-    description,
+    {{ decode_base64("description") }} description,
     cast(NULL as int8) as fund_id,
     false as is_linked_to_floating_interest_rates,
     false as allow_variabe_installments,
