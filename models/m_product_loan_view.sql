@@ -49,7 +49,7 @@ WITH source AS (
 
 SELECT
     cast(NULL as int8) as id,
-    short_name AS short_name,
+    SUBSTRING({{ decode_base64("name") }}, 0, 3) AS short_name,
     {{ decode_base64("currency_code") }} currency_code,
     cast(0 as int4) as currency_digits,
     cast(1 as int4) as currency_multiplesof,
