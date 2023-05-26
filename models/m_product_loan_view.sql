@@ -3,7 +3,7 @@ WITH source AS (
         lp.ENCODEDKEY as external_id,
         {{ decode_base64("PRODUCTNAME") }} AS name,
         SUBSTRING({{ decode_base64("PRODUCTNAME") }}, 0, 3) AS short_name,
-        {{ decode_base64(lp.CURRENCYCODE) }} AS currency_code,
+        {{ decode_base64("CURRENCYCODE") }} AS currency_code,
         DEFAULTLOANAMOUNT as principal_amount,
         MINLOANAMOUNT as min_principal_amount,
         MAXLOANAMOUNT as max_principal_amount,
