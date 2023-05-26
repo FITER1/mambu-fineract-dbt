@@ -29,7 +29,7 @@ WITH source AS (
             WHEN ACCOUNTINGMETHOD = 'ACCRUAL' THEN 3
             ELSE 0
         END as accounting_type,
-        pas DEFAULTTOLERANCEPERIOD AS grace_on_arrears_ageing
+        pas.DEFAULTTOLERANCEPERIOD AS grace_on_arrears_ageing
     FROM loanproduct lp JOIN interestproductsettings ips
     ON lp.INTERESTRATESETTINGSKEY = ips.ENCODEDKEY
     JOIN productarrearssettings pas
