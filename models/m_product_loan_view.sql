@@ -1,13 +1,13 @@
 WITH source AS (
     SELECT
         lp.ENCODEDKEY as external_id,
-        {{ decode_base64("PRODUCTNAME") }} AS name,
-        SUBSTRING({{ decode_base64("PRODUCTNAME") }}, 0, 3) AS short_name,
-        {{ decode_base64("CURRENCYCODE") }} AS currency_code,
+        PRODUCTNAME AS name,
+        SUBSTRING(PRODUCTNAME, 0, 3) AS short_name,
+        CURRENCYCODE AS currency_code,
         DEFAULTLOANAMOUNT as principal_amount,
         MINLOANAMOUNT as min_principal_amount,
         MAXLOANAMOUNT as max_principal_amount,
-        {{ decode_base64("PRODUCTDESCRIPTION") }} AS description,
+        PRODUCTDESCRIPTION AS description,
         ips.DEFAULTINTERESTRATE AS nominal_interest_rate_per_period,
         ips.MININTERESTRATE AS min_nominal_interest_rate_per_period,
         ips.MAXINTERESTRATE AS max_nominal_interest_rate_per_period,
