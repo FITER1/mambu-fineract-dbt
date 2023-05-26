@@ -15,15 +15,31 @@ WITH source AS (
             WHEN INTERESTCALCULATIONMETHOD = 'FLAT' THEN 1
             ELSE 0 
         END as interest_method_enum,
-        IFNULL(DEFAULTREPAYMENTPERIODCOUNT, 1) repay_every,
+        CASE
+            WHEN DEFAULTREPAYMENTPERIODCOUNT IS NULL THEN 1
+            ELSE DEFAULTREPAYMENTPERIODCOUNT
+        END as repay_every,
         CASE
             WHEN REPAYMENTPERIODUNIT = 'DAYS' THEN 0
             WHEN REPAYMENTPERIODUNIT = 'WEEKS' THEN 1
             ELSE 2 -- Default to months
         END as repayment_period_frequency_enum,
-        IFNULL(DEFAULTNUMINSTALLMENTS, 3) number_of_repayments,
-        IFNULL(MINNUMINSTALLMENTS, 3) min_number_of_repayments,
-        IFNULL(MAXNUMINSTALLMENTS, 6) max_number_of_repayments,
+        CASE
+            WHEN DEFAULTNUMINSTALLMENTS IS NULL THEN 3
+            ELSE DEFAULTNUMINSTALLMENTS
+        END as number_of_repayments,
+        CASE
+            WHEN DEFAULTNUMINSTALLMENTS IS NULL THEN 3
+            ELSE DEFAULTNUMINSTALLMENTS
+        END as number_of_repayments,
+        CASE
+            WHEN MINNUMINSTALLMENTS IS NULL THEN 3
+            ELSE MINNUMINSTALLMENTS
+        END as min_number_of_repayments,
+        CASE
+            WHEN MAXNUMINSTALLMENTS IS NULL THEN 6
+            ELSE MAXNUMINSTALLMENTS
+        END as max_number_of_repayments,
         CASE
             WHEN ACCOUNTINGMETHOD = 'ACCRUAL' THEN 3
             ELSE 0
