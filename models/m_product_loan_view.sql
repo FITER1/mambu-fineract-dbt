@@ -116,6 +116,5 @@ SELECT
     true as is_account_level_arrears_tolerance_enable,
     false as is_bnpl_loan_product,
     false as requires_equity_contribution,
-    cast(NULL as numeric(19,6)) as requires_equity_contribution,
     cast(NULL as numeric(19,6)) as equity_contribution_loan_percentage
 FROM source
