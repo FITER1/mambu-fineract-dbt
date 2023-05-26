@@ -2,7 +2,7 @@ WITH source AS (
     SELECT
         lp.ENCODEDKEY as external_id,
         PRODUCTNAME AS name,
-        SUBSTRING(PRODUCTNAME, 0, 3) AS short_name,
+        SUBSTRING(ID, 0, 3) AS short_name,
         CURRENCYCODE AS currency_code,
         DEFAULTLOANAMOUNT as principal_amount,
         MINLOANAMOUNT as min_principal_amount,
