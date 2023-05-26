@@ -25,14 +25,6 @@ WITH source AS (
             ELSE 2 -- Default to months
         END as repayment_period_frequency_enum,
         CASE
-            WHEN DEFAULTNUMINSTALLMENTS IS NULL THEN 3
-            ELSE DEFAULTNUMINSTALLMENTS
-        END as number_of_repayments,
-        CASE
-            WHEN DEFAULTNUMINSTALLMENTS IS NULL THEN 3
-            ELSE DEFAULTNUMINSTALLMENTS
-        END as number_of_repayments,
-        CASE
             WHEN MINNUMINSTALLMENTS IS NULL THEN 3
             ELSE MINNUMINSTALLMENTS
         END as min_number_of_repayments,
