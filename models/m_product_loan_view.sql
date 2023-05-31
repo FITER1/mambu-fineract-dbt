@@ -3,7 +3,6 @@ WITH source AS (
         "ID" as id,
         lp.ENCODEDKEY as external_id,
         PRODUCTNAME AS name,
-        SUBSTRING(UUID(), 0, 3) AS short_name,
         CURRENCYCODE AS currency_code,
         DEFAULTLOANAMOUNT as principal_amount,
         MINLOANAMOUNT as min_principal_amount,
@@ -50,7 +49,7 @@ WITH source AS (
 
 SELECT
     cast(NULL as int8) as id,
-    short_name,
+    NULL as short_name,
     {{ decode_base64("currency_code") }} currency_code,
     cast(0 as int4) as currency_digits,
     cast(1 as int4) as currency_multiplesof,
