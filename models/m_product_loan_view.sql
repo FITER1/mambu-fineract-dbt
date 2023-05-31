@@ -3,7 +3,7 @@ WITH source AS (
         "ID" as id,
         lp.ENCODEDKEY as external_id,
         PRODUCTNAME AS name,
-        CONCAT(SUBSTRING(RANDOM(), 0, 3)) AS short_name,
+        SUBSTRING(CONCAT(RANDOM(), ''), 0, 3) AS short_name,
         CURRENCYCODE AS currency_code,
         DEFAULTLOANAMOUNT as principal_amount,
         MINLOANAMOUNT as min_principal_amount,
