@@ -1,4 +1,4 @@
 {{ config(materialized='table') }}
 
 SELECT *
-FROM "public"."loanproduct"
+FROM "public"."final_loanaccount"
