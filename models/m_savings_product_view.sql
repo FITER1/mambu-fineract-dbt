@@ -4,8 +4,8 @@ WITH source AS (
         "NAME" AS name,
         sp.DESCRIPTION AS description,
         CASE
-            WHEN {{ decode_base64("PRODUCTTYPE") }} = 'CURRENT_ACCOUNT' THEN 300
-            WHEN {{ decode_base64("PRODUCTTYPE") }} = 'FIXED_DEPOSIT' THEN 200
+            WHEN {{ decode_base64(sp.PRODUCTTYPE) }} = 'CURRENT_ACCOUNT' THEN 300
+            WHEN {{ decode_base64(sp.PRODUCTTYPE) }} = 'FIXED_DEPOSIT' THEN 200
             ELSE 100
         END as deposit_type_enum,
         ips.DEFAULTINTERESTRATE AS nominal_annual_interest_rate,
