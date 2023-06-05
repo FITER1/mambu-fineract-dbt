@@ -5,16 +5,8 @@ WITH source AS (
         sp.DESCRIPTION AS description,
         sp.PRODUCTTYPE AS product_type,
         ips.DEFAULTINTERESTRATE AS nominal_annual_interest_rate,
-        CASE
-            WHEN INTERESTPAYMENTPOINT = 'ON_ACCOUNT_MATURITY' THEN 8
-            WHEN INTERESTPAYMENTPOINT = 'EVERY_WEEK' THEN 4
-            ELSE 4
-        END as interest_posting_period_enum,
-        CASE
-            WHEN ACCOUNTINGMETHOD = 'ACCRUAL' THEN 3
-            WHEN ACCOUNTINGMETHOD = 'CASH' THEN 2
-            ELSE 1
-        END as accounting_type,
+        sp.INTERESTPAYMENTPOINT as interest_payment_point,
+        sp.ACCOUNTINGMETHOD as accounting_method,
         CASE
             WHEN cast(ALLOWOVERDRAFT as int4) = 1 THEN true
             ELSE false
@@ -52,12 +44,19 @@ SELECT
     cast(1 as int4) as currency_multiplesof,
     nominal_annual_interest_rate,
     cast(1 as int4) as interest_compounding_period_enum,
-    interest_posting_period_enum,
+    CASE
+        WHEN {{ decode_base64("interest_payment_point") }} = 'ON_ACCOUNT_MATURITY' THEN 8
+        ELSE 4
+    END as interest_posting_period_enum,
     cast(1 as int4) as interest_calculation_type_enum,
     cast(365 as int4) as interest_calculation_days_in_year_type_enum,
     cast(NULL as numeric(19,6)) as min_required_opening_balance,
     cast(NULL as numeric(19,6)) as lockin_period_frequency_enum,
-    accounting_type,
+    CASE
+        WHEN {{ decode_base64("accounting_method") }} = 'ACCRUAL' THEN 3
+        WHEN {{ decode_base64("accounting_method") }} = 'CASH' THEN 2
+        ELSE 1
+    END as accounting_type,
     cast(NULL as numeric(19,6)) as withdrawal_fee_amount,
     cast(NULL as int4) as withdrawal_fee_type_enum,
     false as withdrawal_fee_for_transfer,
