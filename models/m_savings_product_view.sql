@@ -1,6 +1,6 @@
 WITH source AS (
     SELECT
-        lp.ENCODEDKEY as external_id,
+        sp.ENCODEDKEY as external_id,
         NAME AS name,
         DESCRIPTION AS description,
         CASE
