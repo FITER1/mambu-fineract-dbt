@@ -12,7 +12,7 @@ WITH source AS (
             ELSE false
         END as allow_overdraft,
         MAXOVERDRAFTLIMIT AS overdraft_limit,
-        ops.DEFAULTINTERESTRATE AS nominal_interest_rate_overdraft,
+        ops.DEFAULTINTERESTRATE AS nominal_annual_interest_rate_overdraft,
         MINOPENINGBALANCE as min_required_balance,
         CASE
             WHEN cast(WITHHOLDINGTAXENABLED as int4) = 1 THEN true
