@@ -27,7 +27,7 @@ WITH source AS (
         ops.DEFAULTINTERESTRATE AS nominal_interest_rate_overdraft,
         MINOPENINGBALANCE as min_required_balance,
         CASE
-            WHEN WITHHOLDINGTAXENABLED = 1 THEN true
+            WHEN cast(WITHHOLDINGTAXENABLED as int4) = 1 THEN true
             ELSE false
         END as withhold_tax,
         DORMANCYPERIODDAYS as days_to_dormancy,
