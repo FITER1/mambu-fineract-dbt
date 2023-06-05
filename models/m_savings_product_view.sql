@@ -1,8 +1,8 @@
 WITH source AS (
     SELECT
         sp.ENCODEDKEY as external_id,
-        NAME AS name,
-        DESCRIPTION AS description,
+        sp.NAME AS name,
+        sp.DESCRIPTION AS description,
         CASE
             WHEN PRODUCTTYPE = 'CURRENT_ACCOUNT' THEN 300
             WHEN PRODUCTTYPE = 'FIXED_DEPOSIT' THEN 200
