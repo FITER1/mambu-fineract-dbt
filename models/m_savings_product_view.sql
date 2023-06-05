@@ -20,7 +20,7 @@ WITH source AS (
             ELSE 1
         END as accounting_type,
         CASE
-            WHEN ALLOWOVERDRAFT = 1 THEN true
+            WHEN cast(ALLOWOVERDRAFT as int4) = 1 THEN true
             ELSE false
         END as allow_overdraft,
         MAXOVERDRAFTLIMIT AS overdraft_limit,
