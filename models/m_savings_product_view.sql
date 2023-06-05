@@ -37,7 +37,7 @@ WITH source AS (
         END as is_dormancy_tracking_active
     FROM {{ ref('savingsproduct') }} as sp LEFT JOIN {{ ref('interestproductsettings') }} as ips
     ON sp.INTERESTRATESETTINGSKEY = ips.ENCODEDKEY
-    LEFT JOIN JOIN {{ ref('interestproductsettings') }} as ops
+    LEFT JOIN {{ ref('interestproductsettings') }} as ops
     ON sp.OVERDRAFTINTERESTRATESETTINGSKEY = ops.ENCODEDKEY
 )
 
