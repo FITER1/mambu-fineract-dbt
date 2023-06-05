@@ -51,6 +51,7 @@ SELECT
     cast(1 as int4) as interest_calculation_type_enum,
     cast(365 as int4) as interest_calculation_days_in_year_type_enum,
     cast(NULL as numeric(19,6)) as min_required_opening_balance,
+    cast(NULL as numeric(19,6)) as lockin_period_frequency,
     cast(NULL as numeric(19,6)) as lockin_period_frequency_enum,
     CASE
         WHEN {{ decode_base64("accounting_method") }} = 'ACCRUAL' THEN 3
