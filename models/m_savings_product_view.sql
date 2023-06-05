@@ -63,7 +63,7 @@ SELECT
     false as withdrawal_fee_for_transfer,
     allow_overdraft,
     overdraft_limit,
-    nominal_interest_rate_overdraft,
+    nominal_annual_interest_rate_overdraft,
     cast(0 as numeric(19,6)) as min_overdraft_for_interest_calculation,
     min_required_balance,
     false as enforce_min_required_balance,
