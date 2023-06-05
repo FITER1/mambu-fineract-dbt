@@ -3,11 +3,7 @@ WITH source AS (
         sp.ENCODEDKEY as external_id,
         "NAME" AS name,
         sp.DESCRIPTION AS description,
-        CASE
-            WHEN PRODUCTTYPE = {{ encode_base64('CURRENT_ACCOUNT') }} THEN 300
-            WHEN PRODUCTTYPE = {{ encode_base64('FIXED_DEPOSIT') }} THEN 200
-            ELSE 100
-        END as deposit_type_enum,
+        sp.PRODUCTTYPE AS product_type,
         ips.DEFAULTINTERESTRATE AS nominal_annual_interest_rate,
         CASE
             WHEN INTERESTPAYMENTPOINT = 'ON_ACCOUNT_MATURITY' THEN 8
@@ -46,7 +42,11 @@ SELECT
     {{ decode_base64("name") }} as name,
     NULL as short_name,
     {{ decode_base64("external_id") }} as external_id,
-    deposit_type_enum,
+    CASE
+        WHEN {{ decode_base64("product_type") }} = 'CURRENT_ACCOUNT' THEN 300
+        WHEN {{ decode_base64("product_type") }} = 'FIXED_DEPOSIT' THEN 200
+        ELSE 100
+    END as deposit_type_enum,
     'NGN' AS currency_code,
     cast(0 as int4) as currency_digits,
     cast(1 as int4) as currency_multiplesof,
