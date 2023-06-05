@@ -33,7 +33,7 @@ SELECT
     cast(NULL as int8) as id,
     {{ decode_base64("name") }} as name,
     NULL as short_name,
-    {{ decode_base64("external_id") }} as external_id,
+    {{ decode_base64("external_id") }} as description, --pass external_id to description as we don't have external id on savings products
     CASE
         WHEN {{ decode_base64("product_type") }} = 'CURRENT_ACCOUNT' THEN 300
         WHEN {{ decode_base64("product_type") }} = 'FIXED_DEPOSIT' THEN 200
