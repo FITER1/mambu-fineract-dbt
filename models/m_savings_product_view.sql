@@ -4,19 +4,19 @@ WITH source AS (
         "NAME" AS name,
         sp.DESCRIPTION AS description,
         CASE
-            WHEN {{ decode_base64(sp.PRODUCTTYPE) }} = 'CURRENT_ACCOUNT' THEN 300
-            WHEN {{ decode_base64(sp.PRODUCTTYPE) }} = 'FIXED_DEPOSIT' THEN 200
+            WHEN PRODUCTTYPE = 'CURRENT_ACCOUNT' THEN 300
+            WHEN PRODUCTTYPE = 'FIXED_DEPOSIT' THEN 200
             ELSE 100
         END as deposit_type_enum,
         ips.DEFAULTINTERESTRATE AS nominal_annual_interest_rate,
         CASE
-            WHEN {{ decode_base64("INTERESTPAYMENTPOINT") }} = 'ON_ACCOUNT_MATURITY' THEN 8
-            WHEN {{ decode_base64("INTERESTPAYMENTPOINT") }} = 'EVERY_WEEK' THEN 4
+            WHEN INTERESTPAYMENTPOINT = 'ON_ACCOUNT_MATURITY' THEN 8
+            WHEN INTERESTPAYMENTPOINT = 'EVERY_WEEK' THEN 4
             ELSE 4
         END as interest_posting_period_enum,
         CASE
-            WHEN {{ decode_base64("ACCOUNTINGMETHOD") }} = 'ACCRUAL' THEN 3
-            WHEN {{ decode_base64("ACCOUNTINGMETHOD") }} = 'CASH' THEN 2
+            WHEN ACCOUNTINGMETHOD = 'ACCRUAL' THEN 3
+            WHEN ACCOUNTINGMETHOD = 'CASH' THEN 2
             ELSE 1
         END as accounting_type,
         CASE
