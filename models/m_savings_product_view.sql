@@ -4,19 +4,19 @@ WITH source AS (
         "NAME" AS name,
         sp.DESCRIPTION AS description,
         CASE
-            WHEN PRODUCTTYPE = 'CURRENT_ACCOUNT' THEN 300
-            WHEN PRODUCTTYPE = 'FIXED_DEPOSIT' THEN 200
+            WHEN {{ decode_base64("PRODUCTTYPE") }} = 'CURRENT_ACCOUNT' THEN 300
+            WHEN {{ decode_base64("PRODUCTTYPE") }} = 'FIXED_DEPOSIT' THEN 200
             ELSE 100
         END as deposit_type_enum,
         ips.DEFAULTINTERESTRATE AS nominal_annual_interest_rate,
         CASE
-            WHEN INTERESTPAYMENTPOINT = 'ON_ACCOUNT_MATURITY' THEN 8
-            WHEN INTERESTPAYMENTPOINT = 'EVERY_WEEK' THEN 4
+            WHEN {{ decode_base64("INTERESTPAYMENTPOINT") }} = 'ON_ACCOUNT_MATURITY' THEN 8
+            WHEN {{ decode_base64("INTERESTPAYMENTPOINT") }} = 'EVERY_WEEK' THEN 4
             ELSE 4
         END as interest_posting_period_enum,
         CASE
-            WHEN ACCOUNTINGMETHOD = 'ACCRUAL' THEN 3
-            WHEN ACCOUNTINGMETHOD = 'CASH' THEN 2
+            WHEN {{ decode_base64("ACCOUNTINGMETHOD") }} = 'ACCRUAL' THEN 3
+            WHEN {{ decode_base64("ACCOUNTINGMETHOD") }} = 'CASH' THEN 2
             ELSE 1
         END as accounting_type,
         CASE
@@ -43,9 +43,9 @@ WITH source AS (
 
 SELECT
     cast(NULL as int8) as id,
-    name,
+    {{ decode_base64("name") }} as name,
     NULL as short_name,
-    external_id,
+    {{ decode_base64("external_id") }} as external_id,
     deposit_type_enum,
     'NGN' AS currency_code,
     cast(0 as int4) as currency_digits,
