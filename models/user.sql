@@ -1,4 +1,4 @@
 {{ config(materialized='table') }}
 
 SELECT *
-FROM "public"."user"
+FROM "public"."user2"
