@@ -24,7 +24,7 @@ user_with_decoded_keys AS (
         {{ decode_base64("email") }} AS decoded_email,
         {{ decode_base64("encodedkey") }} AS decoded_external_id,
         CASE WHEN {{ decode_base64("userstate") }} = 'ACTIVE' THEN TRUE ELSE FALSE END AS decoded_is_active
-    FROM {{ ref('user') }}
+    FROM {{ ref('user2') }}
 )
 
 SELECT 
