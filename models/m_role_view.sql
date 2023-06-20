@@ -3,7 +3,7 @@
 WITH role_decoded AS (
     SELECT 
         ROW_NUMBER() OVER () as id,
-        NAME as name,
+        "NAME" as name,
         'No description available' as description,
         FALSE as is_disabled
     FROM {{ ref('role') }} 
