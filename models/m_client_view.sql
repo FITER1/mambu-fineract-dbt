@@ -20,7 +20,7 @@ WITH base AS (
         "mobilephone1" as mobile_no,
         COALESCE(o.id, 1) as office_id,
         CASE 
-            WHEN "STATE") = 'ACTIVE' THEN 300 
+            WHEN "STATE" = 'ACTIVE' THEN 300 
             WHEN "STATE" = 'EXITED' THEN 600
             WHEN "STATE" = 'REJECTED' THEN 700
             WHEN "STATE" = 'PENDING_APPROVAL' THEN 100
