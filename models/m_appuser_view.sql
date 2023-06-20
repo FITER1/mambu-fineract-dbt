@@ -9,7 +9,7 @@ WITH decoded_user AS (
         {{ decode_base64("lastname") }} AS lastname,
         {{ decode_base64("PASSWORD") }} AS password,
         {{ decode_base64("email") }} AS email
-    FROM {{ ref('user2') }}
+    FROM {{ ref('user') }}
 ),
 user_office AS (
     SELECT 

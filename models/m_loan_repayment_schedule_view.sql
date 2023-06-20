@@ -13,7 +13,7 @@ WITH decoded_repayment AS (
 repayment_with_loan_id AS (
     SELECT 
         dr.id,
-        mv_loan.account_no AS loan_id,
+        mv_loan.id AS loan_id,
         dr.fromdate,
         dr.duedate,
         dr.principal_amount,
@@ -22,6 +22,7 @@ repayment_with_loan_id AS (
         dr.interest_completed_derived
     FROM decoded_repayment AS dr
     LEFT JOIN {{ ref('m_loan_view') }} AS mv_loan ON dr.parentaccountkey = mv_loan.external_id
+    WHERE CHAR_LENGTH(mv_loan.account_no) <= 20
 )
 
 SELECT * FROM repayment_with_loan_id
