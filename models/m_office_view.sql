@@ -10,7 +10,7 @@ WITH source AS (
 SELECT
     id::int8 as id,
     CAST(NULL AS int8) as parent_id,
-    NULL as hierarchy,
+    '.' as hierarchy,
     external_id,
     name,
     opening_date
