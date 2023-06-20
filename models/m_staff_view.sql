@@ -11,19 +11,19 @@ roles AS (
         CAST(rv.id AS int2) AS organisational_role_enum,
         {{ decode_base64("encodedkey") }} AS role_encoded_key
     FROM {{ ref('role') }}
-    LEFT JOIN {{ ref('m_role_view') }} AS rv ON rv.name = {{ decode_base64("NAME") }}
+    LEFT JOIN {{ ref('m_role_view') }} AS rv ON rv.name = "NAME"
 ),
 user_with_decoded_keys AS (
     SELECT *,
-        {{ decode_base64("assignedbranchkey") }} AS decoded_assignedbranchkey,
-        {{ decode_base64("role_encodedkey_oid") }} AS decoded_role_encodedkey_oid,
-        {{ decode_base64("firstname") }} AS decoded_firstname,
-        {{ decode_base64("lastname") }} AS decoded_lastname,
-        {{ decode_base64("username") }} AS decoded_username,
-        {{ decode_base64("mobilephone1") }} AS decoded_mobile_no,
-        {{ decode_base64("email") }} AS decoded_email,
+        assignedbranchkey AS decoded_assignedbranchkey,
+        role_encodedkey_oid AS decoded_role_encodedkey_oid,
+        firstname AS decoded_firstname,
+        lastname AS decoded_lastname,
+        username AS decoded_username,
+        mobilephone1 AS decoded_mobile_no,
+        email AS decoded_email,
         {{ decode_base64("encodedkey") }} AS decoded_external_id,
-        CASE WHEN {{ decode_base64("userstate") }} = 'ACTIVE' THEN TRUE ELSE FALSE END AS decoded_is_active
+        CASE WHEN userstate = 'ACTIVE' THEN TRUE ELSE FALSE END AS decoded_is_active
     FROM {{ ref('user2') }}
 )
 
