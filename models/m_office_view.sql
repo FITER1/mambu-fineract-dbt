@@ -1,8 +1,8 @@
 WITH source AS (
     SELECT
-        {{ decode_base64("encodedkey")}} as external_id,
+        encodedkey as external_id,
         "ID" as id,
-        {{ decode_base64("NAME") }} AS name,
+        "NAME" AS name,
         CREATIONDATE as opening_date
     FROM branch
 )
