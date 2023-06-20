@@ -1,7 +1,7 @@
 WITH decoded_repayment AS (
     SELECT
         ROW_NUMBER() OVER (ORDER BY ENCODEDKEY) as id,
-        {{ decode_base64("parentaccountkey") }} AS parentaccountkey,
+        "parentaccountkey" AS parentaccountkey,
         CREATIONDATE as fromdate,
         DUEDATE as duedate,
         PRINCIPALDUE as principal_amount,

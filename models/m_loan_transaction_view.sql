@@ -13,20 +13,20 @@ WITH type_mapping AS (
 ),
 decoded_loantransaction AS (
     SELECT
-        {{ decode_base64("encodedkey") }} AS external_id,
+        "encodedkey" AS external_id,
         AMOUNT AS amount,
         BALANCE AS outstanding_loan_balance_derived,
-        {{ decode_base64("parentaccountkey") }} AS parent_id,
+        "parentaccountkey" AS parent_id,
         creationdate AS created_date,
-        {{ decode_base64("TYPE") }} AS transaction_type_raw,
+        "TYPE" AS transaction_type_raw,
         ENTRYDATE AS transaction_date,
         PRINCIPALAMOUNT AS principal_portion_derived,
         INTERESTAMOUNT AS interest_portion_derived,
         FEESAMOUNT AS fee_charges_portion_derived,
         PENALTYAMOUNT AS penalty_charges_portion_derived,
         transactionid as id,
-        {{ decode_base64("branchkey") }} AS branch_key,
-        {{ decode_base64("userkey") }} AS user_key
+        "branchkey" AS branch_key,
+        "userkey" AS user_key
     FROM {{ ref('final_loantransaction') }}
 ),
 loan_transactions AS (

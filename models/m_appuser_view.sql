@@ -2,13 +2,13 @@
 
 WITH decoded_user AS (
     SELECT 
-        {{ decode_base64("encodedkey") }} AS user_external_id,
+        encodedkey AS user_external_id,
         "ID" AS id,
-        {{ decode_base64("username") }} AS username,
-        {{ decode_base64("firstname") }} AS firstname,
-        {{ decode_base64("lastname") }} AS lastname,
-        {{ decode_base64("PASSWORD") }} AS password,
-        {{ decode_base64("email") }} AS email
+        username AS username,
+        firstname AS firstname,
+        lastname AS lastname,
+        "PASSWORD" AS password,
+        email AS email
     FROM {{ ref('user2') }}
 ),
 user_office AS (

@@ -6,15 +6,15 @@
 
 WITH base AS (
     SELECT *,
-        {{ decode_base64("encodedkey") }} as external_id,
-        {{ decode_base64("accountholdertype") }} as decoded_accountholdertype,
-        {{ decode_base64("accountholderkey") }} as decoded_accountholderkey,
-        {{ decode_base64("interestcalculationmethod") }} as decoded_interestcalculationmethod,
-        {{ decode_base64("interestchargefrequency") }} as decoded_interestchargefrequency,
-        {{ decode_base64("assignedbranchkey") }} as decoded_assignedbranchkey,
-        {{ decode_base64("assigneduserkey") }} as decoded_assigneduserkey,
-        {{ decode_base64("repaymentperiodunit") }} as decoded_repaymentperiodunit,
-        {{ decode_base64("accountstate") }} as decoded_accountstate
+        encodedkey as external_id,
+        accountholdertype as decoded_accountholdertype,
+        accountholderkey as decoded_accountholderkey,
+        interestcalculationmethod as decoded_interestcalculationmethod,
+        interestchargefrequency as decoded_interestchargefrequency,
+        assignedbranchkey as decoded_assignedbranchkey,
+        assigneduserkey as decoded_assigneduserkey,
+        repaymentperiodunit as decoded_repaymentperiodunit,
+        accountstate as decoded_accountstate
     FROM {{ ref('final_loanaccount') }}
 ),
 
