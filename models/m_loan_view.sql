@@ -44,6 +44,7 @@ SELECT
     ROW_NUMBER() OVER () as id,
     b.external_id,
     b."ID" as account_no,
+    pv.external_id as product_id,
     CASE WHEN b.decoded_accountholdertype = 'CLIENT' THEN cv.id ELSE NULL END as client_id, 
     CASE WHEN b.decoded_accountholdertype = 'GROUP' THEN gv.id ELSE NULL END as group_id, 
     CASE 
