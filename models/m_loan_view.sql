@@ -34,6 +34,10 @@ office_view AS (
 staff_view AS (
     SELECT *
     FROM m_staff_view
+),
+product_view AS (
+    SELECT *
+    FROM m_product_loan_view
 )
 
 SELECT 
@@ -113,6 +117,8 @@ SELECT
     b.feesdue as fee_charges_charged_derived,
     b.feespaid as fee_charges_repaid_derived
 FROM base b
+JOIN product_view pv
+    ON b.PRODUCTTYPEKEY = pv.external_id
 LEFT JOIN client_view cv
     ON b.decoded_accountholderkey = cv.external_id
 LEFT JOIN group_view gv
@@ -120,4 +126,4 @@ LEFT JOIN group_view gv
 LEFT JOIN office_view ov 
     ON b.decoded_assignedbranchkey = ov.external_id    
 LEFT JOIN staff_view sv 
-    ON b.decoded_assigneduserkey = sv.external_id    
+    ON b.decoded_assigneduserkey = sv.external_id
