@@ -31,12 +31,12 @@ WITH source AS (
 
 SELECT
     cast(NULL as int8) as id,
-    {{ decode_base64("name") }} as name,
+    "name" as name,
     NULL as short_name,
-    {{ decode_base64("external_id") }} as description, --pass external_id to description as we don't have external id on savings products
+    "external_id" as description, --pass external_id to description as we don't have external id on savings products
     CASE
-        WHEN {{ decode_base64("product_type") }} = 'CURRENT_ACCOUNT' THEN 300
-        WHEN {{ decode_base64("product_type") }} = 'FIXED_DEPOSIT' THEN 200
+        WHEN "product_type" = 'CURRENT_ACCOUNT' THEN 300
+        WHEN "product_type" = 'FIXED_DEPOSIT' THEN 200
         ELSE 100
     END as deposit_type_enum,
     'NGN' AS currency_code,
@@ -45,7 +45,7 @@ SELECT
     nominal_annual_interest_rate,
     cast(1 as int4) as interest_compounding_period_enum,
     CASE
-        WHEN {{ decode_base64("interest_payment_point") }} = 'ON_ACCOUNT_MATURITY' THEN 8
+        WHEN "interest_payment_point" = 'ON_ACCOUNT_MATURITY' THEN 8
         ELSE 4
     END as interest_posting_period_enum,
     cast(1 as int4) as interest_calculation_type_enum,
@@ -54,8 +54,8 @@ SELECT
     cast(NULL as numeric(19,6)) as lockin_period_frequency,
     cast(NULL as numeric(19,6)) as lockin_period_frequency_enum,
     CASE
-        WHEN {{ decode_base64("accounting_method") }} = 'ACCRUAL' THEN 3
-        WHEN {{ decode_base64("accounting_method") }} = 'CASH' THEN 2
+        WHEN "accounting_method" = 'ACCRUAL' THEN 3
+        WHEN "accounting_method" = 'CASH' THEN 2
         ELSE 1
     END as accounting_type,
     cast(NULL as numeric(19,6)) as withdrawal_fee_amount,
