@@ -45,8 +45,10 @@ SELECT
     b.external_id,
     b."ID" as account_no,
     pv.external_id as product_id,
-    CASE WHEN b.decoded_accountholdertype = 'CLIENT' THEN cv.id ELSE NULL END as client_id, 
-    CASE WHEN b.decoded_accountholdertype = 'GROUP' THEN gv.id ELSE NULL END as group_id, 
+    CASE WHEN b.decoded_accountholdertype = 'CLIENT' THEN cv.id ELSE NULL END as client_id,
+    cv.external_id as client_external_id,
+    CASE WHEN b.decoded_accountholdertype = 'GROUP' THEN gv.id ELSE NULL END as group_id,
+    gv.external_id as group_external_id,
     CASE 
         WHEN b.decoded_accountholdertype = 'CLIENT' THEN 1 
         WHEN b.decoded_accountholdertype = 'GROUP' THEN 2 
@@ -56,8 +58,7 @@ SELECT
         WHEN b.decoded_interestcalculationmethod  = 'FLAT' THEN 0
         WHEN b.decoded_interestcalculationmethod IN ('DECLINING_BALANCE_DISCOUNTED', 'DECLINING_BALANCE') THEN 1
         ELSE NULL
-    END as  interest_method_enum,  
-    
+    END as  interest_method_enum,
     ov.id as office_id,
     sv.id as created_by,
     b.closeddate as closedon_date,
