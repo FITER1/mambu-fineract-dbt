@@ -24,8 +24,8 @@ WITH base AS (
         allowoverdraft,
         overdraftlimit,
         WITHHOLDINGTAXSOURCEKEY,
-        INTERESTSETTINGSKEY,
-        OVERDRAFTINTERESTSETTINGSKEY
+        INTERESTSETTINGSKEY as interest_settings_key,
+        OVERDRAFTINTERESTSETTINGSKEY as overdraft_interest_settings_key
     FROM {{ ref('final_investment') }}
 ),
 
@@ -115,9 +115,9 @@ LEFT JOIN client_view cv
 LEFT JOIN group_view gv
     ON b.account_holder_key = gv.external_id
 LEFT JOIN interest_settings ist
-    ON b.INTERESTSETTINGSKEY = ist.encodedkey
+    ON b.interest_settings_key = ist.encodedkey
 LEFT JOIN interest_settings oist
-    ON b.OVERDRAFTINTERESTSETTINGSKEY = oist.encodedkey
+    ON b.overdraft_interest_settings_key = oist.encodedkey
 LEFT JOIN indexratesource irs ON b.WITHHOLDINGTAXSOURCEKEY = irs.encodedkey
 LEFT JOIN indexrate ir ON ir.INDEXINTERESTRATESOURCE_ENCODEDKEY_OID = irs.encodedkey
 
