@@ -22,7 +22,7 @@ WITH base AS (
         PRODUCTTYPEKEY,
         allowoverdraft,
         overdraftlimit,
-        WITHHOLDINGTAXSOURCEKEY,
+        WITHHOLDINGTAXSOURCEKEY
     FROM {{ ref('final_investment') }}
 ),
 
