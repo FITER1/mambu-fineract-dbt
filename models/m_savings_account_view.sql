@@ -23,7 +23,7 @@ WITH base AS (
         PRODUCTTYPEKEY as product_type_key,
         allowoverdraft,
         overdraftlimit,
-        WITHHOLDINGTAXSOURCEKEY,
+        WITHHOLDINGTAXSOURCEKEY as withholding_tax_source_key,
         INTERESTSETTINGSKEY as interest_settings_key,
         OVERDRAFTINTERESTSETTINGSKEY as overdraft_interest_settings_key
     FROM {{ ref('final_investment') }}
@@ -118,6 +118,6 @@ LEFT JOIN interest_settings ist
     ON b.interest_settings_key = ist.encodedkey
 LEFT JOIN interest_settings oist
     ON b.overdraft_interest_settings_key = oist.encodedkey
-LEFT JOIN indexratesource irs ON b.WITHHOLDINGTAXSOURCEKEY = irs.encodedkey
+LEFT JOIN indexratesource irs ON b.withholding_tax_source_key = irs.encodedkey
 LEFT JOIN indexrate ir ON ir.INDEXINTERESTRATESOURCE_ENCODEDKEY_OID = irs.encodedkey
 
