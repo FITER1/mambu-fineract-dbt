@@ -4,7 +4,7 @@ WITH base AS (
     SELECT *,
         encodedkey as external_id,
         accountholdertype,
-        accountholderkey,
+        accountholderkey as account_holder_key,
         accounttype,
         accountstate as accountstate,
         accruedinterest,
@@ -109,9 +109,9 @@ FROM base b
 JOIN product_view pv
     ON b.product_type_key = pv.external_id
 LEFT JOIN client_view cv
-    ON b.accountholderkey = cv.external_id
+    ON b.account_holder_key = cv.external_id
 LEFT JOIN group_view gv
-    ON b.accountholderkey = gv.external_id
+    ON b.account_holder_key = gv.external_id
 LEFT JOIN office_view ov
     ON b.assignedbranchkey = ov.external_id
 LEFT JOIN staff_view sv
