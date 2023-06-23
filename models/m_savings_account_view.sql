@@ -109,13 +109,13 @@ FROM base b
 JOIN product_view pv
     ON b.PRODUCTTYPEKEY = pv.external_id
 LEFT JOIN client_view cv
-    ON b.decoded_accountholderkey = cv.external_id
+    ON b.accountholderkey = cv.external_id
 LEFT JOIN group_view gv
-    ON b.decoded_accountholderkey = gv.external_id
+    ON b.accountholderkey = gv.external_id
 LEFT JOIN office_view ov
-    ON b.decoded_assignedbranchkey = ov.external_id
+    ON b.assignedbranchkey = ov.external_id
 LEFT JOIN staff_view sv
-    ON b.decoded_assigneduserkey = sv.external_id
+    ON b.assigneduserkey = sv.external_id
 LEFT JOIN interest_settings ist
     ON b.INTERESTRATESETTINGSKEY = ist.encodedkey
 LEFT JOIN interest_settings oist
