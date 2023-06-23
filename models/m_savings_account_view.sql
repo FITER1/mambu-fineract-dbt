@@ -9,7 +9,7 @@ WITH base AS (
         accountstate as account_state,
         accruedinterest,
         balance,
-        closeddate,
+        closeddate as closed_date,
         creationdate as creation_date,
         approveddate as approved_date,
         activationdate as activation_date,
@@ -76,14 +76,14 @@ SELECT
     b.approved_date as approvedon_date,
     b.activation_date as activatedon_date,
     CASE
-        WHEN b.accountstate = 'CLOSED_REJECTED' THEN b.closeddate
+        WHEN b.account_state = 'CLOSED_REJECTED' THEN b.closeddate
         ELSE NULL
     END as  rejectedon_date,
     CASE
-        WHEN b.accountstate = 'WITHDRAWN' THEN b.closeddate
+        WHEN b.account_state = 'WITHDRAWN' THEN b.closeddate
         ELSE NULL
     END as  withdrawnon_date,
-    b.closeddate as closedon_date,
+    b.closed_date as closedon_date,
     pv.currency_code,
     pv.currency_digits,
     pv.currency_multiplesof,
