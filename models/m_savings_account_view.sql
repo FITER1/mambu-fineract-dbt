@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 WITH base AS (
     SELECT *,
         encodedkey as external_id,

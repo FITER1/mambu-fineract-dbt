@@ -1,3 +1,7 @@
+{{ config(materialized='table') }}
+
+{{ config(materialized='table') }}
+
 WITH source AS (
     SELECT
         sp.ENCODEDKEY as external_id,
