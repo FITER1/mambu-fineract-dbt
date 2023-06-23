@@ -21,8 +21,8 @@ WITH base AS (
         "NAME",
         notes,
         PRODUCTTYPEKEY as product_type_key,
-        allowoverdraft,
-        overdraftlimit,
+        allowoverdraft as allow_overdraft,
+        overdraftlimit as overdraft_limit,
         WITHHOLDINGTAXSOURCEKEY as withholding_tax_source_key,
         INTERESTSETTINGSKEY as interest_settings_key,
         OVERDRAFTINTERESTSETTINGSKEY as overdraft_interest_settings_key
@@ -97,10 +97,10 @@ SELECT
     pv.lockin_period_frequency_enum,
     pv.withdrawal_fee_for_transfer,
     CASE
-        WHEN b.allowoverdraft = 1 THEN true
+        WHEN b.allow_overdraft = 1 THEN true
         ELSE false
     END as allow_overdraft,
-    b.overdraftlimit as overdraft_limit,
+    b.overdraft_limit as overdraft_limit,
     oist.interestrate as nominal_annual_interest_rate_overdraft,
     b.balance as account_balance,
     CASE
