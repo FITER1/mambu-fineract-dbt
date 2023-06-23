@@ -38,6 +38,7 @@ SELECT
     "name" as name,
     NULL as short_name,
     "external_id" as description, --pass external_id to description as we don't have external id on savings products
+    external_id,
     CASE
         WHEN "product_type" = 'CURRENT_ACCOUNT' THEN 300
         WHEN "product_type" = 'FIXED_DEPOSIT' THEN 200
