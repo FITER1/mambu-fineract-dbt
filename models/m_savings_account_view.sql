@@ -8,7 +8,7 @@ WITH base AS (
         accounttype as account_type,
         accountstate as account_state,
         accruedinterest,
-        balance,
+        balance as account_balance,
         closeddate as closed_date,
         creationdate as creation_date,
         approveddate as approved_date,
@@ -102,7 +102,7 @@ SELECT
     END as allow_overdraft,
     b.overdraft_limit as overdraft_limit,
     oist.interestrate as nominal_annual_interest_rate_overdraft,
-    b.balance as account_balance,
+    b.account_balance as account_balance,
     CASE
         WHEN ir.RATE IS NOT NULL THEN true
         ELSE false
