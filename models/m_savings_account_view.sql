@@ -16,7 +16,6 @@ WITH base AS (
         lastintereststoreddate,
         lastmodifieddate,
         maturitydate,
-        maximumwithdrawlamount,
         "NAME",
         notes,
         PRODUCTTYPEKEY,
