@@ -1,18 +1,18 @@
 WITH decoded_document AS (
     SELECT
-        {{ decode_base64("encodedkey") }} AS encodedkey,
+        encodedkey,
         "LOCATION" AS "LOCATION",
         filesize,
         creationdate,
         lastmodifieddate,
-        {{ decode_base64("NAME") }} AS "NAME",
+        "NAME",
         documentholderkey,
         createdbyuserkey,
-        {{ decode_base64("originalfilename") }} AS originalfilename,
+        originalfilename,
         "description" AS description,
         documentholdertype,
         "ID",
-        {{ decode_base64("TYPE") }} AS "TYPE"
+        "TYPE"
     FROM {{ ref('document') }}
 )
 SELECT
