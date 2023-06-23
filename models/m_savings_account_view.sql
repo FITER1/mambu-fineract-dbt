@@ -97,7 +97,7 @@ SELECT
     pv.lockin_period_frequency_enum,
     pv.withdrawal_fee_for_transfer,
     CASE
-        WHEN b.allow_overdraft = 1 THEN true
+        WHEN b.allow_overdraft = true THEN true
         ELSE false
     END as allow_overdraft,
     b.overdraft_limit as overdraft_limit,
