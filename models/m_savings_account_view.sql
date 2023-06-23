@@ -112,8 +112,6 @@ LEFT JOIN client_view cv
     ON b.account_holder_key = cv.external_id
 LEFT JOIN group_view gv
     ON b.account_holder_key = gv.external_id
-LEFT JOIN staff_view sv
-    ON b.assigneduserkey = sv.external_id
 LEFT JOIN interest_settings ist
     ON b.INTERESTRATESETTINGSKEY = ist.encodedkey
 LEFT JOIN interest_settings oist
