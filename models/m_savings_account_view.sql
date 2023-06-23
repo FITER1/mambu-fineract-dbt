@@ -20,7 +20,7 @@ WITH base AS (
         maturitydate,
         "NAME",
         notes,
-        PRODUCTTYPEKEY,
+        PRODUCTTYPEKEY as product_type_key,
         allowoverdraft,
         overdraftlimit,
         WITHHOLDINGTAXSOURCEKEY
@@ -107,7 +107,7 @@ SELECT
     END as withhold_tax
 FROM base b
 JOIN product_view pv
-    ON b.PRODUCTTYPEKEY = pv.external_id
+    ON b.product_type_key = pv.external_id
 LEFT JOIN client_view cv
     ON b.accountholderkey = cv.external_id
 LEFT JOIN group_view gv
