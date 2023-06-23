@@ -10,9 +10,9 @@ WITH base AS (
         accruedinterest,
         balance,
         closeddate,
-        creationdate,
-        approveddate,
-        activationdate,
+        creationdate as creation_date,
+        approveddate as approved_date,
+        activationdate as activation_date,
         "ID" as account_no,
         lastinterestcalculationdate,
         lastintereststoreddate,
@@ -72,9 +72,9 @@ SELECT
         WHEN b.account_state = 'CLOSED_REJECTED' THEN 500
         ELSE 100
     END as  status_enum,
-    b.creationdate as submittedon_date,
-    b.approveddate as approvedon_date,
-    b.activatedon_date as activationdate,
+    b.creation_date as submittedon_date,
+    b.approved_date as approvedon_date,
+    b.activation_date as activatedon_date,
     CASE
         WHEN b.accountstate = 'CLOSED_REJECTED' THEN b.closeddate
         ELSE NULL
