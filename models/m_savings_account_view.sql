@@ -3,10 +3,10 @@
 WITH base AS (
     SELECT *,
         encodedkey as external_id,
-        accountholdertype,
+        accountholdertype as account_holder_type,
         accountholderkey as account_holder_key,
-        accounttype,
-        accountstate as accountstate,
+        accounttype as account_type,
+        accountstate as account_state,
         accruedinterest,
         balance,
         closeddate,
@@ -54,22 +54,22 @@ SELECT
     b.external_id,
     b.account_no,
     pv.external_id as product_id,
-    CASE WHEN b.accountholdertype = 'CLIENT' THEN cv.id ELSE NULL END as client_id,
+    CASE WHEN b.account_holder_type = 'CLIENT' THEN cv.id ELSE NULL END as client_id,
     cv.external_id as client_external_id,
-    CASE WHEN b.accountholdertype = 'GROUP' THEN gv.id ELSE NULL END as group_id,
+    CASE WHEN b.account_holder_type = 'GROUP' THEN gv.id ELSE NULL END as group_id,
     gv.external_id as group_external_id,
     CASE
-        WHEN b.accounttype = 'FIXED_DEPOSIT' THEN 200
-        WHEN b.accounttype IN ('SAVINGS_PLAN', 'REGULAR_SAVINGS') THEN 100
+        WHEN b.account_type = 'FIXED_DEPOSIT' THEN 200
+        WHEN b.account_type IN ('SAVINGS_PLAN', 'REGULAR_SAVINGS') THEN 100
         ELSE 300
     END as deposit_type_enum,
     CASE
-        WHEN b.accountstate  = 'MATURED' THEN 800
-        WHEN b.accountstate = 'WITHDRAWN' THEN 400
-        WHEN b.accountstate  = 'CLOSED' THEN 600
-        WHEN b.accountstate = 'ACTIVE' THEN 300
-        WHEN b.accountstate = 'APPROVED' THEN 200
-        WHEN b.accountstate = 'CLOSED_REJECTED' THEN 500
+        WHEN b.account_state  = 'MATURED' THEN 800
+        WHEN b.account_state = 'WITHDRAWN' THEN 400
+        WHEN b.account_state  = 'CLOSED' THEN 600
+        WHEN b.account_state = 'ACTIVE' THEN 300
+        WHEN b.account_state = 'APPROVED' THEN 200
+        WHEN b.account_state = 'CLOSED_REJECTED' THEN 500
         ELSE 100
     END as  status_enum,
     b.creationdate as submittedon_date,
