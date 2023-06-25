@@ -6,7 +6,7 @@ WITH base AS (
         ABS(amount) as transaction_amount,
         balance as running_balance,
         "COMMENT" AS transaction_notes,
-        DETAILS_ENCODEDKEY_OID,
+        DETAILS_ENCODEDKEY_OID as details_external_id,
         PARENTACCOUNTKEY,
         CREATIONDATE,
         "TYPE" as transaction_type,
@@ -53,5 +53,5 @@ SELECT
     b.ENTRYDATE as transaction_date
 FROM base b
 JOIN transaction_details td
-    ON b.DETAILS_ENCODEDKEY_OID = td.ENCODEDKEY
+    ON b.details_external_id = td.ENCODEDKEY
 
