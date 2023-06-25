@@ -23,8 +23,7 @@ WITH base AS (
         CASE 
             WHEN "STATE" = 'ACTIVE' THEN 300 
             WHEN "STATE" = 'EXITED' THEN 600
-            WHEN "STATE" = 'REJECTED' THEN 700
-            WHEN "STATE" = 'PENDING_APPROVAL' THEN 100
+            WHEN "STATE" = 'INACTIVE' THEN 100
             WHEN "STATE" = 'BLACKLISTED' THEN 400
             ELSE 0 
         END as status_enum,
