@@ -35,6 +35,6 @@ WITH base AS (
 m_client as (
     SELECT  b.*, s1.id as created_by,s1.id as last_modified_by 
     from base b 
-    join m_staff_view s1 on b.assigneduserkey = s1.external_id -- corrected join condition
+    left join m_staff_view s1 on b.assigneduserkey = s1.external_id -- corrected join condition
 )
 SELECT * FROM m_client
