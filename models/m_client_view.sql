@@ -12,6 +12,7 @@ WITH base AS (
         "birthdate" as date_of_birth,
         "creationdate" as submittedon_date,
         firstname as firstname,
+        middlename as middlename,
         lastname as lastname,
         (SELECT id FROM m_code_value WHERE code_value = gender)  as gender_cv_id,
         "lastmodifieddate" as last_modified_on_utc,
