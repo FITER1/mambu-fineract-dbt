@@ -46,7 +46,7 @@ SELECT
     b.comment,
     td.TRANSACTIONCHANNELKEY as transaction_channel_key,
     b.CREATIONDATE as creation_date,
-    CASE WHEN b.REVERSALTRANSACTIONKEY IS NULL THEN false ELSE true AS is_reversed,
+    CASE WHEN b.REVERSALTRANSACTIONKEY IS NULL THEN false ELSE true END AS is_reversed,
     b.LINKEDLOANTRANSACTIONKEY as linked_loan_transaction_key,
     b.LINKEDSAVINGSTRANSACTIONKEY as linked_savings_transaction_key,
     b.OVERDRAFTAMOUNT as overdraft_amount,
