@@ -5,7 +5,7 @@ WITH base AS (
         encodedkey as external_id,
         ABS(amount) as transaction_amount,
         balance as running_balance,
-        comment,
+        "COMMENT" AS transaction_notes,
         DETAILS_ENCODEDKEY_OID,
         PARENTACCOUNTKEY,
         CREATIONDATE,
@@ -43,7 +43,7 @@ SELECT
         WHEN b.transaction_type = 'TRANSFER_ADJUSTMENT' THEN 2
         ELSE 2
     END as  transaction_type_enum,
-    b.comment,
+    b.transaction_notes,
     td.TRANSACTIONCHANNELKEY as transaction_channel_key,
     b.CREATIONDATE as creation_date,
     CASE WHEN b.REVERSALTRANSACTIONKEY IS NULL THEN false ELSE true END AS is_reversed,
