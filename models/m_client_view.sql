@@ -19,6 +19,7 @@ WITH base AS (
         "ID" as account_no,
         "mobilephone1" as mobile_no,
         COALESCE(o.id, 1) as office_id,
+        o.external_id as office_external_id,
         CASE 
             WHEN "STATE" = 'ACTIVE' THEN 300 
             WHEN "STATE" = 'EXITED' THEN 600
