@@ -27,6 +27,7 @@ SELECT
     ROW_NUMBER() OVER () as id,
     b.external_id,
     b.transaction_amount,
+    b.running_balance,
     b.account_external_id,
     CASE
         WHEN b.transaction_type  = 'DEPOSIT' THEN 1

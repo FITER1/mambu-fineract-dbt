@@ -28,6 +28,7 @@ SELECT
     b.external_id,
     b.transaction_amount,
     b.account_external_id,
+    b.running_balance,
     CASE
         WHEN b.transaction_type  = 'DEPOSIT' THEN 1
         WHEN b.transaction_type = 'WITHDRAWAL' THEN 2

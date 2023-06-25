@@ -32,14 +32,15 @@ WHERE m_staff.id = m_appuser.staff_id;
 ALTER TABLE m_client
 DROP CONSTRAINT m_client_mobile_no_key;
 
-INSERT INTO m_client (account_no, external_id, status_enum, firstname, lastname, display_name, mobile_no, office_id, date_of_birth, submittedon_date, activation_date, closedon_date)
+INSERT INTO m_client (account_no, external_id, status_enum, firstname, middlename, lastname, display_name, mobile_no, office_id, date_of_birth, submittedon_date, activation_date, closedon_date)
 SELECT
     account_no,
     external_id,
     status_enum,
     firstname,
+    middlename,
     lastname,
-    firstname || ' ' || lastname AS display_name, -- concatenate firstname and lastname
+    firstname || ' ' || middlename || ' ' || lastname AS display_name, -- concatenate firstname and lastname
     mobile_no,
     COALESCE((SELECT id FROM m_office WHERE external_id = cv.office_external_id), 1) as office_id,
     date_of_birth::date,
@@ -261,4 +262,123 @@ FROM public.m_loan_repayment_schedule_view
 WHERE duedate IS NOT null
 
 -- m_loan_repayment end
+
+--m_savings_account
+
+-- investment
+INSERT INTO m_savings_account (account_no, external_id, client_id, group_id, product_id, status_enum, deposit_type_enum, submittedon_date, approvedon_date, rejectedon_date, withdrawnon_date, activatedon_date, closedon_date, currency_code, currency_digits, currency_multiplesof,
+nominal_annual_interest_rate, interest_compounding_period_enum, interest_posting_period_enum, interest_calculation_type_enum, interest_calculation_days_in_year_type_enum, min_required_opening_balance, lockin_period_frequency, lockin_period_frequency_enum, withdrawal_fee_for_transfer,
+allow_overdraft, overdraft_limit, nominal_annual_interest_rate_overdraft, account_balance_derived, withhold_tax)
+SELECT
+    account_no,
+    external_id,
+    (SELECT id FROM m_client WHERE external_id = sv.client_external_id) client_id,
+    (SELECT id FROM m_group WHERE external_id = sv.group_external_id) group_id,
+    (SELECT id FROM m_savings_product WHERE description = sv.product_id) product_id,
+    status_enum,
+    deposit_type_enum,
+    submittedon_date,
+    approvedon_date,
+    rejectedon_date,
+    withdrawnon_date,
+    activatedon_date,
+    closedon_date,
+    currency_code,
+    currency_digits,
+    currency_multiplesof,
+    COALESCE(interestrate, 0),
+    interest_compounding_period_enum,
+    interest_posting_period_enum,
+    interest_calculation_type_enum,
+    interest_calculation_days_in_year_type_enum,
+    min_required_opening_balance,
+    lockin_period_frequency,
+    lockin_period_frequency_enum,
+    withdrawal_fee_for_transfer,
+    allow_overdraft,
+    overdraft_limit,
+    nominal_annual_interest_rate_overdraft,
+    account_balance,
+    withhold_tax
+FROM m_savings_account_view sv;
+
+--wallet
+
+INSERT INTO m_savings_account (account_no, external_id, client_id, group_id, product_id, status_enum, deposit_type_enum, submittedon_date, approvedon_date, rejectedon_date, withdrawnon_date, activatedon_date, closedon_date, currency_code, currency_digits, currency_multiplesof,
+nominal_annual_interest_rate, interest_compounding_period_enum, interest_posting_period_enum, interest_calculation_type_enum, interest_calculation_days_in_year_type_enum, min_required_opening_balance, lockin_period_frequency, lockin_period_frequency_enum, withdrawal_fee_for_transfer,
+allow_overdraft, overdraft_limit, nominal_annual_interest_rate_overdraft, account_balance_derived, withhold_tax)
+SELECT
+    account_no,
+    external_id,
+    (SELECT id FROM m_client WHERE external_id = sv.client_external_id) client_id,
+    (SELECT id FROM m_group WHERE external_id = sv.group_external_id) group_id,
+    (SELECT id FROM m_savings_product WHERE description = sv.product_id) product_id,
+    status_enum,
+    deposit_type_enum,
+    submittedon_date,
+    approvedon_date,
+    rejectedon_date,
+    withdrawnon_date,
+    activatedon_date,
+    closedon_date,
+    currency_code,
+    currency_digits,
+    currency_multiplesof,
+    COALESCE(interestrate, 0),
+    interest_compounding_period_enum,
+    interest_posting_period_enum,
+    interest_calculation_type_enum,
+    interest_calculation_days_in_year_type_enum,
+    min_required_opening_balance,
+    lockin_period_frequency,
+    lockin_period_frequency_enum,
+    withdrawal_fee_for_transfer,
+    allow_overdraft,
+    overdraft_limit,
+    nominal_annual_interest_rate_overdraft,
+    account_balance,
+    withhold_tax
+FROM m_savings_account_view2 sv;
+
+-- m_savings_account end
+
+
+-- m_savings_account_transaction
+
+ALTER TABLE m_payment_type
+ADD COLUMN external_id VARCHAR(100),
+ADD CONSTRAINT uq_external_id UNIQUE (external_id);
+
+ALTER TABLE m_savings_account_transaction
+ADD COLUMN encoded_key VARCHAR(100),
+ADD CONSTRAINT uq_encoded_key UNIQUE (encoded_key);
+
+ALTER TABLE m_payment_detail
+ADD COLUMN transaction_external_id VARCHAR(100),
+ADD CONSTRAINT uq_transaction_external_id UNIQUE (transaction_external_id);
+
+INSERT INTO m_payment_detail (payment_type_id, transaction_external_id)
+SELECT
+    (SELECT id FROM m_payment_type WHERE external_id = stv.transaction_channel_key) payment_type_id,
+    stv.external_id
+FROM m_savings_account_transaction_view2 stv;
+
+INSERT INTO m_savings_account_transaction (savings_account_id, office_id, encoded_key, payment_detail_id, transaction_type_enum, is_reversed, 
+    transaction_date, amount, overdraft_amount_derived, running_balance_derived, created_date, ref_no)
+SELECT
+    (SELECT id FROM m_savings_account WHERE external_id = stv.account_external_id) savings_account_id,
+    1,
+    external_id,
+    (SELECT id FROM m_payment_detail WHERE external_id = stv.transaction_external_id) payment_detail_id,
+    transaction_type_enum,
+    is_reversed,
+    transaction_date,
+    transaction_amount,
+    overdraft_amount,
+    running_balance,
+    creation_date,
+    reversal_transaction_key
+FROM m_savings_account_transaction_view stv
+
+-- m_savings_account_transaction end
 
