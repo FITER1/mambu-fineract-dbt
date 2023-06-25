@@ -7,14 +7,14 @@ WITH base AS (
         balance as running_balance,
         "COMMENT" AS transaction_notes,
         DETAILS_ENCODEDKEY_OID as details_external_id,
-        PARENTACCOUNTKEY,
-        CREATIONDATE,
+        PARENTACCOUNTKEY as account_external_id,
+        CREATIONDATE as creation_date,
         "TYPE" as transaction_type,
-        REVERSALTRANSACTIONKEY,
-        LINKEDLOANTRANSACTIONKEY,
-        LINKEDSAVINGSTRANSACTIONKEY,
-        OVERDRAFTAMOUNT,
-        ENTRYDATE
+        REVERSALTRANSACTIONKEY as reversal_transaction_key,
+        LINKEDLOANTRANSACTIONKEY as linked_loan_transaction_key,
+        LINKEDSAVINGSTRANSACTIONKEY as linked_savings_transaction_key,
+        OVERDRAFTAMOUNT as overdraft_amount,
+        ENTRYDATE as transaction_date
     FROM {{ ref('final_investment_transaction') }}
 ),
 
@@ -27,7 +27,7 @@ SELECT
     ROW_NUMBER() OVER () as id,
     b.external_id,
     b.transaction_amount,
-    b.PARENTACCOUNTKEY as account_external_id,
+    b.account_external_id,
     CASE
         WHEN b.transaction_type  = 'DEPOSIT' THEN 1
         WHEN b.transaction_type = 'WITHDRAWAL' THEN 2
@@ -45,12 +45,12 @@ SELECT
     END as  transaction_type_enum,
     b.transaction_notes,
     td.TRANSACTIONCHANNELKEY as transaction_channel_key,
-    b.CREATIONDATE as creation_date,
-    CASE WHEN b.REVERSALTRANSACTIONKEY IS NULL THEN false ELSE true END AS is_reversed,
-    b.LINKEDLOANTRANSACTIONKEY as linked_loan_transaction_key,
-    b.LINKEDSAVINGSTRANSACTIONKEY as linked_savings_transaction_key,
-    b.OVERDRAFTAMOUNT as overdraft_amount,
-    b.ENTRYDATE as transaction_date
+    b.creation_date,
+    CASE WHEN b.reversal_transaction_key IS NULL THEN false ELSE true END AS is_reversed,
+    b.linked_loan_transaction_key,
+    b.linked_savings_transaction_key,
+    b.overdraft_amount,
+    b.transaction_date
 FROM base b
 JOIN transaction_details td
     ON b.details_external_id = td.ENCODEDKEY
