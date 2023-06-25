@@ -378,7 +378,24 @@ SELECT
     running_balance,
     creation_date,
     reversal_transaction_key
-FROM m_savings_account_transaction_view stv
+FROM m_savings_account_transaction_view stv;
+
+INSERT INTO m_savings_account_transaction (savings_account_id, office_id, encoded_key, payment_detail_id, transaction_type_enum, is_reversed, 
+    transaction_date, amount, overdraft_amount_derived, running_balance_derived, created_date, ref_no)
+SELECT
+    (SELECT id FROM m_savings_account WHERE external_id = stv.account_external_id) savings_account_id,
+    1,
+    external_id,
+    (SELECT id FROM m_payment_detail WHERE external_id = stv.transaction_external_id) payment_detail_id,
+    transaction_type_enum,
+    is_reversed,
+    transaction_date,
+    transaction_amount,
+    overdraft_amount,
+    running_balance,
+    creation_date,
+    reversal_transaction_key
+FROM m_savings_account_transaction_view2 stv;
 
 -- m_savings_account_transaction end
 

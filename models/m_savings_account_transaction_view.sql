@@ -48,6 +48,7 @@ SELECT
     td.TRANSACTIONCHANNELKEY as transaction_channel_key,
     b.creation_date,
     CASE WHEN b.reversal_transaction_key IS NULL THEN false ELSE true END AS is_reversed,
+    b.reversal_transaction_key,
     b.linked_loan_transaction_key,
     b.linked_savings_transaction_key,
     b.overdraft_amount,
