@@ -55,6 +55,8 @@ WHERE account_no NOT IN (SELECT account_no FROM m_client);
 UPDATE m_client SET status_enum = m_client_view.status_enum
 FROM m_client_view
 WHERE m_client_view.external_id = m_client.external_id;
+
+UPDATE m_client SET legal_form_enum = 1;
 -- m_client end
 
 -- m_group
@@ -367,9 +369,9 @@ INSERT INTO m_savings_account_transaction (savings_account_id, office_id, encode
     transaction_date, amount, overdraft_amount_derived, running_balance_derived, created_date, ref_no)
 SELECT
     (SELECT id FROM m_savings_account WHERE external_id = stv.account_external_id) savings_account_id,
-    1,
+    1 office_id,
     external_id,
-    (SELECT id FROM m_payment_detail WHERE external_id = stv.transaction_external_id) payment_detail_id,
+    (SELECT id FROM m_payment_detail WHERE transaction_external_id = stv.external_id) payment_detail_id,
     transaction_type_enum,
     is_reversed,
     transaction_date,
@@ -378,15 +380,15 @@ SELECT
     running_balance,
     creation_date,
     reversal_transaction_key
-FROM m_savings_account_transaction_view stv;
+FROM m_savings_account_transaction_view stv WHERE transaction_amount IS NOT NULL;
 
 INSERT INTO m_savings_account_transaction (savings_account_id, office_id, encoded_key, payment_detail_id, transaction_type_enum, is_reversed, 
     transaction_date, amount, overdraft_amount_derived, running_balance_derived, created_date, ref_no)
 SELECT
     (SELECT id FROM m_savings_account WHERE external_id = stv.account_external_id) savings_account_id,
-    1,
+    1 office_id,
     external_id,
-    (SELECT id FROM m_payment_detail WHERE external_id = stv.transaction_external_id) payment_detail_id,
+    (SELECT id FROM m_payment_detail WHERE transaction_external_id = stv.external_id) payment_detail_id,
     transaction_type_enum,
     is_reversed,
     transaction_date,
@@ -395,7 +397,31 @@ SELECT
     running_balance,
     creation_date,
     reversal_transaction_key
-FROM m_savings_account_transaction_view2 stv;
+FROM m_savings_account_transaction_view2 stv WHERE transaction_amount IS NOT NULL;
+
+UPDATE m_savings_account_transaction t1 SET original_transaction_id = t2.id
+FROM m_savings_account_transaction t2
+WHERE t2.encoded_key = t1.ref_no;
 
 -- m_savings_account_transaction end
+
+-- m_note
+
+INSERT INTO m_note(savings_account_transaction_id, note_type_enum, note, created_date)
+SELECT
+    (SELECT id FROM m_savings_account_transaction WHERE encoded_key = stv.external_id) savings_account_transaction_id,
+    800 note_type_enum,
+    transaction_notes,
+    creation_date
+FROM m_savings_account_transaction_view stv WHERE transaction_notes IS NOT NULL;
+
+INSERT INTO m_note(savings_account_transaction_id, note_type_enum, note, created_date)
+SELECT
+    (SELECT id FROM m_savings_account_transaction WHERE encoded_key = stv.external_id) savings_account_transaction_id,
+    800 note_type_enum,
+    transaction_notes,
+    creation_date
+FROM m_savings_account_transaction_view2 stv WHERE transaction_notes IS NOT NULL;
+
+-- m_note end
 
