@@ -95,7 +95,6 @@ WHERE
  --- m_loan
 
  INSERT INTO public.m_loan (
-    id,
     account_no, 
     external_id, 
     client_id, 
@@ -129,12 +128,11 @@ WHERE
     amortization_method_enum,
     last_modified_on_utc
 )
-SELECT 
-    id,
+SELECT
     account_no, 
     external_id, 
-    client_id, 
-    group_id,
+    (SELECT id FROM m_client WHERE external_id = lv.client_external_id) client_id, 
+    (SELECT id FROM m_group WHERE external_id = lv.group_external_id) group_id,
     (SELECT id FROM m_product_loan WHERE external_id = lv.product_id) product_id,
     loan_type_enum, 
     interest_method_enum, 
@@ -165,7 +163,15 @@ SELECT
     last_modified_on_utc
 FROM public.m_loan_view lv
 WHERE (client_id IS NOT NULL)
+AND external_id NOT IN (SELECT external_id FROM m_loan WHERE external_id IS NOT NULL)
 AND id > 125 AND id NOT IN (507, 508, 509, 511, 513, 514);
+
+
+UPDATE m_loan SET expected_disbursedon_date = disbursementdetails.disbursementdate,
+disbursedon_date = disbursementdetails.disbursementdate
+FROM final_loanaccount
+JOIN disbursementdetails ON final_loanaccount.disbursementdetailskey = disbursementdetails.encodedkey
+WHERE m_loan.external_id = final_loanaccount.encodedkey;
 
  -- m_loan end       
 

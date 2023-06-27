@@ -19,7 +19,8 @@ repayment_with_loan_id AS (
         dr.principal_amount,
         dr.principal_completed_derived,
         dr.interest_amount,
-        dr.interest_completed_derived
+        dr.interest_completed_derived,
+        dr.parentaccountkey as loan_external_id
     FROM decoded_repayment AS dr
     LEFT JOIN {{ ref('m_loan_view') }} AS mv_loan ON dr.parentaccountkey = mv_loan.external_id
     WHERE CHAR_LENGTH(mv_loan.account_no) <= 20

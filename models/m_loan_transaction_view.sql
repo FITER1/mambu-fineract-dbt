@@ -70,7 +70,8 @@ loan_transactions AS (
         dlt.principal_portion_derived,
         dlt.interest_portion_derived,
         dlt.fee_charges_portion_derived,
-        dlt.penalty_charges_portion_derived
+        dlt.penalty_charges_portion_derived,
+        mv_loan.external_id as loan_external_id
     FROM decoded_loantransaction AS dlt
     LEFT JOIN type_mapping tm ON dlt.transaction_type_raw = tm.original
     LEFT JOIN {{ ref('m_office_view') }} AS mv_office ON dlt.branch_key = mv_office.external_id
