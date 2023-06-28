@@ -200,7 +200,6 @@ FROM public.m_document_view;
 -- m_loan_transaction
 INSERT INTO public.m_loan_transaction (
     external_id, 
-    id, 
     amount, 
     outstanding_loan_balance_derived, 
     office_id, 
@@ -215,23 +214,26 @@ INSERT INTO public.m_loan_transaction (
     submitted_on_date,
     is_reversed
 )
+SELECT tmp.* FROM (
 SELECT 
-    external_id, 
-    id, 
-    amount, 
-    outstanding_loan_balance_derived, 
+    ltv.external_id, 
+    ltv.amount, 
+    ltv.outstanding_loan_balance_derived, 
     1, 
-    created_date, 
-    loan_id, 
-    transaction_type_enum, 
-    transaction_date, 
-    principal_portion_derived, 
-    interest_portion_derived, 
-    fee_charges_portion_derived, 
-    penalty_charges_portion_derived,
-    created_date,
+    ltv.created_date, 
+    (SELECT id FROM m_loan WHERE external_id = ltv.loan_external_id) loan_id, 
+    ltv.transaction_type_enum, 
+    ltv.transaction_date, 
+    ltv.principal_portion_derived, 
+    ltv.interest_portion_derived, 
+    ltv.fee_charges_portion_derived, 
+    ltv.penalty_charges_portion_derived,
+    ltv.created_date,
     FALSE
-FROM public.m_loan_transaction_view;
+FROM m_loan_transaction_view ltv LEFT JOIN m_loan_transaction lt
+ON ltv.external_id = lt.external_id
+WHERE lt.id IS NULL
+) tmp WHERE tmp.loan_id IS NOT NULL;
 
 UPDATE m_loan_transaction
 SET office_id = m_client.office_id
@@ -408,6 +410,12 @@ FROM m_savings_account_transaction_view2 stv WHERE transaction_amount IS NOT NUL
 UPDATE m_savings_account_transaction t1 SET original_transaction_id = t2.id
 FROM m_savings_account_transaction t2
 WHERE t2.encoded_key = t1.ref_no;
+
+UPDATE m_savings_account_transaction
+SET office_id = m_client.office_id
+FROM m_savings_account
+JOIN m_client ON m_client.id = m_savings_account.client_id
+WHERE m_savings_account_transaction.savings_account_id = m_savings_account.id;
 
 -- m_savings_account_transaction end
 
