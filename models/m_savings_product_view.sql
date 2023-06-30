@@ -40,7 +40,7 @@ SELECT
     "external_id" as description, --pass external_id to description as we don't have external id on savings products
     external_id,
     CASE
-        WHEN "product_type" = 'CURRENT_ACCOUNT' THEN 300
+        WHEN "product_type" = 'CURRENT_ACCOUNT' THEN 100
         WHEN "product_type" = 'FIXED_DEPOSIT' THEN 200
         ELSE 100
     END as deposit_type_enum,

@@ -60,11 +60,11 @@ SELECT
     gv.external_id as group_external_id,
     CASE
         WHEN b.account_type = 'FIXED_DEPOSIT' THEN 200
-        WHEN b.account_type IN ('SAVINGS_PLAN', 'REGULAR_SAVINGS') THEN 100
+        WHEN b.account_type IN ('SAVINGS_PLAN', 'REGULAR_SAVINGS', 'CURRENT_ACCOUNT') THEN 100
         ELSE 300
     END as deposit_type_enum,
     CASE
-        WHEN b.account_state  = 'MATURED' THEN 800
+        WHEN b.account_state  = 'MATURED' THEN 300
         WHEN b.account_state = 'WITHDRAWN' THEN 400
         WHEN b.account_state  = 'CLOSED' THEN 600
         WHEN b.account_state = 'ACTIVE' THEN 300
