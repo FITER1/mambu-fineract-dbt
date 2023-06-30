@@ -7,7 +7,15 @@ WITH decoded_repayment AS (
         PRINCIPALDUE as principal_amount,
         PRINCIPALPAID as principal_completed_derived,
         INTERESTDUE as interest_amount,
-        INTERESTPAID as interest_completed_derived
+        INTERESTPAID as interest_completed_derived,
+        LASTPAIDDATE as last_paid_date,
+        LASTPENALTYAPPLIEDDATE as last_penalty_applied_date,
+        REPAIDDATE as repaid_date,
+        STATE as state,
+        FEESDUE as fees_due,
+        FEESPAID as fees_paid,
+        PENALTYDUE as penalty_due,
+        PENALTYPAID as penalty_paid
     FROM {{ ref('repayment') }}
 ),
 repayment_with_loan_id AS (
@@ -20,7 +28,15 @@ repayment_with_loan_id AS (
         dr.principal_completed_derived,
         dr.interest_amount,
         dr.interest_completed_derived,
-        dr.parentaccountkey as loan_external_id
+        dr.parentaccountkey as loan_external_id,
+        dr.last_paid_date,
+        dr.last_penalty_applied_date,
+        dr.repaid_date,
+        dr.state,
+        dr.fees_due,
+        dr.fees_paid,
+        dr.penalty_due,
+        dr.penalty_paid
     FROM decoded_repayment AS dr
     LEFT JOIN {{ ref('m_loan_view') }} AS mv_loan ON dr.parentaccountkey = mv_loan.external_id
     WHERE CHAR_LENGTH(mv_loan.account_no) <= 20

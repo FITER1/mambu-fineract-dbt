@@ -40,8 +40,8 @@ loan_transactions AS (
         mv_loan.id AS loan_id,
         CASE 
             WHEN dlt.transaction_type_raw = 'BRANCH_CHANGED' THEN 3
-            WHEN dlt.transaction_type_raw = 'DEFERRED_INTEREST_APPLIED' THEN 11
-            WHEN dlt.transaction_type_raw = 'DEFERRED_INTEREST_APPLIED_ADJUSTMENT' THEN 11
+            WHEN dlt.transaction_type_raw = 'DEFERRED_INTEREST_APPLIED' THEN 19
+            WHEN dlt.transaction_type_raw = 'DEFERRED_INTEREST_APPLIED_ADJUSTMENT' THEN 19
             WHEN dlt.transaction_type_raw = 'DEFERRED_INTEREST_PAID' THEN 2
             WHEN dlt.transaction_type_raw = 'DEFERRED_INTEREST_PAID_ADJUSTMENT' THEN 10
             WHEN dlt.transaction_type_raw = 'DISBURSMENT' THEN 1
@@ -50,11 +50,11 @@ loan_transactions AS (
             WHEN dlt.transaction_type_raw = 'FEE_ADJUSTMENT' THEN 10
             WHEN dlt.transaction_type_raw = 'FEE_CHARGED' THEN 10
             WHEN dlt.transaction_type_raw = 'IMPORT' THEN 1
-            WHEN dlt.transaction_type_raw = 'INTEREST_APPLIED' THEN 11
-            WHEN dlt.transaction_type_raw = 'INTEREST_APPLIED_ADJUSTMENT' THEN 11
+            WHEN dlt.transaction_type_raw = 'INTEREST_APPLIED' THEN 19
+            WHEN dlt.transaction_type_raw = 'INTEREST_APPLIED_ADJUSTMENT' THEN 19
             WHEN dlt.transaction_type_raw = 'INTEREST_DUE_REDUCED' THEN 4
-            WHEN dlt.transaction_type_raw = 'INTEREST_LOCKED' THEN 11
-            WHEN dlt.transaction_type_raw = 'INTEREST_UNLOCKED' THEN 11
+            WHEN dlt.transaction_type_raw = 'INTEREST_LOCKED' THEN 19
+            WHEN dlt.transaction_type_raw = 'INTEREST_UNLOCKED' THEN 19
             WHEN dlt.transaction_type_raw = 'PENALTIES_DUE_REDUCED' THEN 9
             WHEN dlt.transaction_type_raw = 'PENALTY_ADJUSTMENT' THEN 9
             WHEN dlt.transaction_type_raw = 'PENALTY_APPLIED' THEN 10

@@ -269,7 +269,21 @@ SELECT
         AND (interest_amount IS NULL OR interest_amount = interest_completed_derived),
     false
 FROM public.m_loan_repayment_schedule_view
-WHERE duedate IS NOT null
+WHERE duedate IS NOT null;
+
+--update other fields in repayment schedule
+
+UPDATE m_loan_repayment_schedule
+SET fee_charges_amount = repayment.feesdue,
+fee_charges_completed_derived = repayment.feespaid,
+penalty_charges_amount = repayment.penaltydue,
+penalty_charges_completed_derived = repayment.penaltypaid,
+completed_derived = CASE WHEN repayment."STATE" = 'PAID' THEN true ELSE false END,
+obligations_met_on_date = repayment.repaiddate
+FROM repayment
+JOIN m_loan ON m_loan.external_id = repayment.parentaccountkey
+WHERE m_loan.id = m_loan_repayment_schedule.loan_id
+AND m_loan_repayment_schedule.duedate = repayment.duedate;
 
 -- m_loan_repayment end
 
@@ -349,6 +363,17 @@ SELECT
     account_balance,
     withhold_tax
 FROM m_savings_account_view2 sv;
+
+INSERT INTO m_savings_account_interest_rate_chart (savings_account_id, from_date)
+SELECT id, submittedon_date
+FROM m_savings_account WHERE deposit_type_enum > 100
+AND id NOT IN (SELECT savings_account_id FROM m_savings_account_interest_rate_chart);
+
+INSERT into m_savings_account_interest_rate_slab (savings_account_interest_rate_chart_id, period_type_enum,
+                                                 from_period, annual_interest_rate, currency_code)
+SELECT rc.id, 0, 1, sa.nominal_annual_interest_rate, sa.currency_code 
+FROM m_savings_account_interest_rate_chart rc JOIN m_savings_account sa ON rc.savings_account_id = sa.id
+WHERE rc.id NOT IN (SELECT savings_account_interest_rate_chart_id FROM m_savings_account_interest_rate_slab);
 
 -- m_savings_account end
 
