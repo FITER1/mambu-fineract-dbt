@@ -7,29 +7,3 @@ INSERT INTO m_product_loan_configurable_attributes (loan_product_id)
 SELECT id FROM m_product_loan WHERE id NOT IN (SELECT loan_product_id from m_product_loan_configurable_attributes);
 
 UPDATE m_product_loan SET accounting_type = 1 WHERE accounting_type = 3;
-
-INSERT INTO m_deposit_product_term_and_preclosure (savings_product_id, min_deposit_term, max_deposit_term,
-												  min_deposit_term_type_enum, max_deposit_term_type_enum,
-												  pre_closure_penal_applicable, min_deposit_amount, max_deposit_amount,
-												  deposit_amount)
-SELECT msp.id, sp.minmaturityperiod, sp.maxmaturityperiod,
-CASE
-	WHEN sp.maturityperiodunit = 'MONTHS' THEN 2
-	WHEN sp.maturityperiodunit = 'DAYS' THEN 0
-	WHEN sp.maturityperiodunit = 'WEEKS' THEN 1
-	WHEN sp.maturityperiodunit = 'YEARS' THEN 3
-	ELSE NULL
-END AS min_deposit_term_type_enum,
-CASE
-	WHEN sp.maturityperiodunit = 'MONTHS' THEN 2
-	WHEN sp.maturityperiodunit = 'DAYS' THEN 0
-	WHEN sp.maturityperiodunit = 'WEEKS' THEN 1
-	WHEN sp.maturityperiodunit = 'YEARS' THEN 3
-	ELSE NULL
-END AS max_deposit_term_type_enum,
-false pre_closure_penal_applicable,
-sp.minopeningbalance, sp.maxopeningbalance, sp.minopeningbalance
-FROM m_savings_product msp
-JOIN savingsproduct sp ON msp.description = sp.encodedkey
-WHERE id NOT IN (SELECT savings_product_id FROM m_deposit_product_term_and_preclosure)
-AND deposit_type_enum = 200;
