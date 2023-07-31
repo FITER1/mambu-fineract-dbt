@@ -2,7 +2,8 @@ WITH decoded_repayment AS (
     SELECT
         ROW_NUMBER() OVER (ORDER BY ENCODEDKEY) as id,
         "parentaccountkey" AS parentaccountkey,
-        CREATIONDATE as fromdate,
+        -- CREATIONDATE as fromdate,
+        NULL as fromdate,
         DUEDATE as duedate,
         PRINCIPALDUE as principal_amount,
         PRINCIPALPAID as principal_completed_derived,
