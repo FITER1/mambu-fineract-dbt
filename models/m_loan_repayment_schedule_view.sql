@@ -12,7 +12,7 @@ WITH decoded_repayment AS (
         LASTPAIDDATE as last_paid_date,
         LASTPENALTYAPPLIEDDATE as last_penalty_applied_date,
         REPAIDDATE as repaid_date,
-        STATE as state,
+        NULL as state,
         FEESDUE as fees_due,
         FEESPAID as fees_paid,
         PENALTYDUE as penalty_due,
