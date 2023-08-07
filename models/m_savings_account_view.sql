@@ -26,7 +26,7 @@ WITH base AS (
         WITHHOLDINGTAXSOURCEKEY as withholding_tax_source_key,
         INTERESTSETTINGSKEY as interest_settings_key,
         OVERDRAFTINTERESTSETTINGSKEY as overdraft_interest_settings_key
-    FROM {{ ref('final_investment') }}
+    FROM {{ ref('savingsaccount') }}
 ),
 
 client_view AS (

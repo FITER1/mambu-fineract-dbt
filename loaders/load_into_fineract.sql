@@ -1,5 +1,6 @@
 --m_role
-INSERT INTO m_role (name, description, is_disabled) SELECT name, description, is_disabled FROM m_role_view;
+INSERT INTO m_role (name, description, is_disabled) SELECT name, description, is_disabled FROM m_role_view
+WHERE "name" NOT IN (SELECT "name" FROM m_role);
 --m_role end
 
 --m_office
@@ -9,7 +10,7 @@ INSERT INTO m_office SELECT * FROM m_office_view;
 ALTER TABLE m_staff
 DROP CONSTRAINT m_staff_mobile_no_key;
 
-INSERT INTO m_staff SELECT * FROM m_staff_view;
+INSERT INTO m_staff SELECT * FROM m_staff_view WHERE id NOT IN (SELECT id FROM m_staff);
 -- m_staff end
 
 -- reinstate constraint
@@ -20,7 +21,7 @@ ADD CONSTRAINT m_staff_mobile_no_key UNIQUE (mobile_no);
 
 -- m_appuser
 
-INSERT INTO m_appuser SELECT * FROM m_appuser_view WHERE username NOT IN (SELECT username FROM m_appuser) AND id > 40;
+INSERT INTO m_appuser SELECT * FROM m_appuser_view WHERE username NOT IN (SELECT username FROM m_appuser);
 
 -- align staff office_id
 UPDATE m_staff SET office_id = m_appuser.office_id
@@ -40,7 +41,7 @@ SELECT
     firstname,
     middlename,
     lastname,
-    firstname || ' ' || middlename || ' ' || lastname AS display_name, -- concatenate firstname and lastname
+    firstname || ' ' || COALESCE(middlename, '') || ' ' || lastname AS display_name, -- concatenate firstname and lastname
     mobile_no,
     COALESCE((SELECT id FROM m_office WHERE external_id = cv.office_external_id), 1) as office_id,
     date_of_birth::date,
@@ -61,7 +62,6 @@ UPDATE m_client SET legal_form_enum = 1;
 
 -- m_group
 INSERT INTO public.m_group (
-    id,
     external_id,
     status_enum,
     office_id,
@@ -72,7 +72,6 @@ INSERT INTO public.m_group (
     level_id
 )
 SELECT
-    DISTINCT id,
     external_id,
     status_enum,
     office_id,
@@ -82,13 +81,13 @@ SELECT
     account_no,
     level_id
 FROM
-    public.m_group_view
-WHERE
-    CHAR_LENGTH(account_no) <= 20
-    AND id NOT IN (SELECT id FROM m_group)
-    AND display_name NOT LIKE '%test%'
-    AND display_name NOT LIKE '%Test%'
-    AND display_name NOT IN ('Carbon (Agents)','Yemi Alade - TECO', 'Scissors Mgbai - TECO');
+    public.m_group_view;
+-- WHERE
+--     CHAR_LENGTH(account_no) <= 20
+--     AND id NOT IN (SELECT id FROM m_group)
+--     AND display_name NOT LIKE '%test%'
+--     AND display_name NOT LIKE '%Test%'
+--     AND display_name NOT IN ('Carbon (Agents)','Yemi Alade - TECO', 'Scissors Mgbai - TECO');
 
 --m_group end
 
@@ -153,7 +152,7 @@ SELECT
     fee_charges_repaid_derived,
     created_on_utc,
     1,
-    'USD',
+    'NGN',
     2,
     CAST(principal_amount AS numeric(19, 6)), -- Assuming proposed principal amount is same as principal amount
     CAST(principal_amount AS numeric(19, 6)), -- Assuming approved principal amount is same as principal amount
@@ -163,8 +162,9 @@ SELECT
     last_modified_on_utc
 FROM public.m_loan_view lv
 WHERE (client_id IS NOT NULL)
-AND external_id NOT IN (SELECT external_id FROM m_loan WHERE external_id IS NOT NULL)
-AND id > 125 AND id NOT IN (507, 508, 509, 511, 513, 514);
+AND account_no NOT IN (SELECT account_no FROM m_loan);
+-- AND external_id NOT IN (SELECT external_id FROM m_loan WHERE external_id IS NOT NULL)
+-- AND id > 125 AND id NOT IN (507, 508, 509, 511, 513, 514);
 
 
 UPDATE m_loan SET expected_disbursedon_date = disbursementdetails.disbursementdate,
@@ -257,8 +257,8 @@ INSERT INTO public.m_loan_repayment_schedule (
     recalculated_interest_component
 )
 SELECT 
-    CAST(loan_id AS int8),
-    fromdate,
+    (SELECT id FROM m_loan WHERE external_id = rsv.loan_external_id) loan_id,
+    CAST(fromdate AS date),
     duedate,
     ROW_NUMBER() OVER (PARTITION BY loan_id ORDER BY fromdate),
     COALESCE(principal_amount, 0),
@@ -268,8 +268,9 @@ SELECT
     (principal_amount IS NULL OR principal_amount = principal_completed_derived) 
         AND (interest_amount IS NULL OR interest_amount = interest_completed_derived),
     false
-FROM public.m_loan_repayment_schedule_view
-WHERE duedate IS NOT null;
+FROM public.m_loan_repayment_schedule_view rsv
+WHERE duedate IS NOT null
+AND (SELECT id FROM m_loan WHERE external_id = rsv.loan_external_id) IS NOT NULL;
 
 --update other fields in repayment schedule
 
