@@ -1,4 +1,4 @@
 {{ config(materialized='table') }}
 
 SELECT *
-FROM "public"."savingsaccount"
+FROM "public"."final_investment"
