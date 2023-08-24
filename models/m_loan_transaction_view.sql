@@ -1,9 +1,7 @@
 {% macro decode_base64(field) %}
     CONVERT_FROM(DECODE({{ field }}, 'base64'), 'utf-8')
 {% endmacro %}
-{{ load_relation(ref('m_office_view')) }}
-{{ load_relation(ref('m_staff_view')) }}
-{{ load_relation(ref('m_loan_view')) }}
+
 WITH type_mapping AS (
     SELECT * 
     FROM (VALUES 
@@ -15,7 +13,7 @@ WITH type_mapping AS (
 ),
 mv_office AS (
     SELECT id,external_id
-    FROM m_office_view
+    FROM {{ ref('m_office_view') }}
 
     UNION
 
@@ -24,7 +22,7 @@ mv_office AS (
 ),
 mv_staff AS (
     SELECT id,external_id
-    FROM m_staff_view
+    FROM {{ ref('m_staff_view') }}
 
     UNION 
 
@@ -33,7 +31,7 @@ mv_staff AS (
 ),
 mv_loan AS (
     SELECT id,external_id
-    FROM m_loan_view
+    FROM {{ ref('m_loan_view') }}
 
     UNION 
 

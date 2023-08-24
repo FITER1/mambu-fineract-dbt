@@ -3,8 +3,7 @@
         materialized = 'table'
     )
 }}
-{{ load_relation(ref('m_office_view')) }}
-{{ load_relation(ref('m_staff_view')) }}
+
 
 WITH base AS (
     SELECT 
@@ -33,11 +32,11 @@ WITH base AS (
         "activationdate" as activation_date,
         "closeddate" as closedon_date
     FROM {{ ref('final_client') }} c
-    LEFT JOIN m_office_view o ON o.external_id = c.assignedbranchkey
+    LEFT JOIN {{ ref('m_office_view') }} as  o ON o.external_id = c.assignedbranchkey
 ), 
 m_client as (
     SELECT  b.*, s1.id as created_by,s1.id as last_modified_by 
     from base b 
-    left join m_staff_view s1 on b.assigneduserkey = s1.external_id -- corrected join condition
+    left join {{ ref('m_staff_view') }} as  s1 on b.assigneduserkey = s1.external_id -- corrected join condition
 )
 SELECT * FROM m_client

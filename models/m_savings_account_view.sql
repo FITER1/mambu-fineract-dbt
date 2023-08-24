@@ -1,7 +1,4 @@
 {{ config(materialized='table') }}
-{{ load_relation(ref('m_client_view')) }}
-{{ load_relation(ref('m_group_view')) }}
-{{ load_relation(ref('m_savings_product_view')) }}
 
 WITH base AS (
     SELECT *,
@@ -34,7 +31,7 @@ WITH base AS (
 
 client_view AS (
     SELECT id, external_id 
-    FROM m_client_view
+    FROM {{ ref('m_client_view') }}
 
     UNION
 
@@ -44,7 +41,7 @@ client_view AS (
 
 group_view AS (
     SELECT id, external_id 
-    FROM m_group_view
+    FROM {{ ref('m_group_view') }}
 
     UNION 
 
@@ -56,7 +53,7 @@ product_view AS (
     SELECT external_id,currency_code,currency_digits,currency_multiplesof,interest_compounding_period_enum,
     interest_posting_period_enum,interest_calculation_type_enum,interest_calculation_days_in_year_type_enum,
     min_required_opening_balance,lockin_period_frequency,lockin_period_frequency_enum,withdrawal_fee_for_transfer
-    FROM m_savings_product_view
+    FROM {{ ref('m_savings_product_view') }}
     
     UNION
     

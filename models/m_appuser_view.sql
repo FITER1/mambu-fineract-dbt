@@ -1,5 +1,5 @@
 {{ config(materialized='table') }}
-{{ load_relation(ref('m_staff_view')) }}
+
 
 WITH decoded_user AS (
     SELECT 
@@ -14,7 +14,7 @@ WITH decoded_user AS (
 ),
 staff_view AS (
     SELECT id,external_id,office_id
-    FROM m_staff_view
+    FROM {{ ref('m_staff_view')}}
 
     UNION 
 

@@ -1,13 +1,12 @@
 {{ config(materialized='table') }}
-{{ load_relation(ref('m_role_view')) }}
-{{ load_relation(ref('m_office_view')) }}
 
 
 WITH branch_office AS (
     SELECT 
         external_id AS office_external_id,
         id AS office_id
-    FROM m_office_view
+    FROM 
+{{ ref('m_office_view') }}
 
     UNION 
 
@@ -17,7 +16,7 @@ WITH branch_office AS (
     FROM m_office
 ),
 role_view AS (
-select id,name from m_role_view
+select id,name from {{ ref('m_role_view') }}
 
 UNION
 

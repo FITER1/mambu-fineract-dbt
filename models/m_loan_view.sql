@@ -3,10 +3,7 @@
         materialized = 'table'
     )
 }}
-{{ load_relation(ref('m_client_view')) }}
-{{ load_relation(ref('m_group_view')) }}
-{{ load_relation(ref('m_office_view')) }}
-{{ load_relation(ref('m_product_loan_view')) }}
+
 WITH base AS (
     SELECT *,
         encodedkey as external_id,
@@ -23,7 +20,7 @@ WITH base AS (
 
 client_view AS (
     SELECT id, external_id 
-    FROM m_client_view
+    FROM {{ ref('m_client_view') }}
 
     UNION
 
@@ -33,7 +30,7 @@ client_view AS (
 
 group_view AS (
     SELECT id, external_id 
-    FROM m_group_view
+    FROM {{ ref('m_group_view') }}
 
     UNION 
 
@@ -42,7 +39,7 @@ group_view AS (
 ),
 office_view AS (
     SELECT id,external_id
-    FROM m_office_view
+    FROM {{ ref('m_office_view') }}
 
     UNION
 
@@ -51,7 +48,7 @@ office_view AS (
 ),
 staff_view AS (
     SELECT id,external_id
-    FROM m_staff_view
+    FROM {{ ref('m_staff_view') }}
 
     UNION 
 
@@ -60,7 +57,7 @@ staff_view AS (
 ),
 product_view AS (
     SELECT external_id
-    FROM m_product_loan_view
+    FROM {{ ref('m_product_loan_view') }}
 
     UNION
 

@@ -3,8 +3,8 @@
         materialized='table'
     )
 }}
-{{ load_relation(ref('m_office_view')) }}
-{{ load_relation(ref('m_staff_view')) }}
+
+
 WITH office_view AS (
     SELECT id,external_id
     FROM m_office_view
@@ -34,7 +34,7 @@ SELECT
     300 as status_enum, -- default value for status_enum in your PostgreSQL table
     2 as level_id -- level_name Group
 FROM {{ ref('final_group') }}
-LEFT JOIN office_view  office
+LEFT JOIN {{ ref('m_office_view') }} as   office
 ON "assignedbranchkey" = office.external_id
-LEFT JOIN staff_view staff
+LEFT JOIN {{ ref('m_staff_view') }} as staff
 ON "assigneduserkey" = staff.external_id

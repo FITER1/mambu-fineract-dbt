@@ -1,5 +1,5 @@
 {{ config(materialized='table') }}
-{{ load_relation(ref('m_loan_view')) }}
+
 WITH decoded_repayment AS (
     SELECT
         ROW_NUMBER() OVER (ORDER BY ENCODEDKEY) as id,
@@ -23,7 +23,7 @@ WITH decoded_repayment AS (
 ),
 mv_loan AS (
     SELECT id,external_id,account_no
-    FROM m_loan_view
+    FROM {{ ref('m_loan_view') }}
 
     UNION 
 
