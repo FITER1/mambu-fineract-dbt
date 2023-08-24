@@ -1,17 +1,34 @@
 {{ config(materialized='table') }}
+{{ adapter.get_relation('m_role_view') }}
+{{ adapter.get_relation('m_office_view') }}
+
 
 WITH branch_office AS (
     SELECT 
         external_id AS office_external_id,
         id AS office_id
-    FROM {{ ref('m_office_view') }}
+    FROM m_office_view
+
+    UNION 
+
+    SELECT 
+        external_id AS office_external_id,
+        id AS office_id
+    FROM m_office
+),
+role_view AS (
+select id,name from m_role_view
+
+UNION
+
+select id,name from m_role
 ),
 roles AS (
     SELECT 
         CAST(rv.id AS int2) AS organisational_role_enum,
         encodedkey AS role_encoded_key
     FROM {{ ref('role') }}
-    LEFT JOIN {{ ref('m_role_view') }} AS rv ON rv.name = "NAME"
+    LEFT JOIN role_view rv ON rv.name = "NAME"
 ),
 user_with_decoded_keys AS (
     SELECT *,

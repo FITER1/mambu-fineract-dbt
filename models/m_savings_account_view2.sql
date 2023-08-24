@@ -1,4 +1,7 @@
 {{ config(materialized='table') }}
+{{ adapter.get_relation('m_client_view') }}
+{{ adapter.get_relation('m_group_view') }}
+{{ adapter.get_relation('m_savings_product_view') }}
 
 WITH base AS (
     SELECT *,

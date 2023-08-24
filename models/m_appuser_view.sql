@@ -1,4 +1,5 @@
 {{ config(materialized='table') }}
+{{ adapter.get_relation('m_staff_view') }}
 
 WITH decoded_user AS (
     SELECT 
@@ -11,6 +12,15 @@ WITH decoded_user AS (
         email AS email
     FROM {{ ref('user2') }}
 ),
+staff_view AS (
+    SELECT id,external_id,office_id
+    FROM m_staff_view
+
+    UNION 
+
+    SELECT id,external_id,office_id
+    FROM m_staff
+),
 user_office AS (
     SELECT 
         du.user_external_id,
@@ -22,7 +32,7 @@ user_office AS (
         du.email,
         s.office_id
     FROM decoded_user AS du
-    LEFT JOIN {{ ref('m_staff_view') }} AS s ON du.user_external_id = s.external_id
+    LEFT JOIN staff_view s ON du.user_external_id = s.external_id
 )
 
 SELECT 

@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+{{ adapter.get_relation('m_loan_view') }}
 WITH decoded_repayment AS (
     SELECT
         ROW_NUMBER() OVER (ORDER BY ENCODEDKEY) as id,
@@ -19,6 +21,15 @@ WITH decoded_repayment AS (
         PENALTYPAID as penalty_paid
     FROM {{ ref('repayment') }}
 ),
+mv_loan AS (
+    SELECT id,external_id,account_no
+    FROM m_loan_view
+
+    UNION 
+
+    SELECT id,external_id,account_no
+    FROM m_loan
+),
 repayment_with_loan_id AS (
     SELECT 
         dr.id,
@@ -39,7 +50,7 @@ repayment_with_loan_id AS (
         dr.penalty_due,
         dr.penalty_paid
     FROM decoded_repayment AS dr
-    LEFT JOIN {{ ref('m_loan_view') }} AS mv_loan ON dr.parentaccountkey = mv_loan.external_id
+    LEFT JOIN  mv_loan ON dr.parentaccountkey = mv_loan.external_id
     WHERE CHAR_LENGTH(mv_loan.account_no) <= 20
 )
 

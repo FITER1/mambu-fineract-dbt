@@ -3,6 +3,8 @@
         materialized = 'table'
     )
 }}
+{{ adapter.get_relation('m_office_view') }}
+{{ adapter.get_relation('m_staff_view') }}
 
 WITH base AS (
     SELECT 
