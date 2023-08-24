@@ -327,43 +327,43 @@ SELECT
     withhold_tax
 FROM m_savings_account_view sv;
 
---wallet
+--wallet  
 
--- INSERT INTO m_savings_account (account_no, external_id, client_id, group_id, product_id, status_enum, deposit_type_enum, submittedon_date, approvedon_date, rejectedon_date, withdrawnon_date, activatedon_date, closedon_date, currency_code, currency_digits, currency_multiplesof,
--- nominal_annual_interest_rate, interest_compounding_period_enum, interest_posting_period_enum, interest_calculation_type_enum, interest_calculation_days_in_year_type_enum, min_required_opening_balance, lockin_period_frequency, lockin_period_frequency_enum, withdrawal_fee_for_transfer,
--- allow_overdraft, overdraft_limit, nominal_annual_interest_rate_overdraft, account_balance_derived, withhold_tax)
--- SELECT
---     account_no,
---     external_id,
---     (SELECT id FROM m_client WHERE external_id = sv.client_external_id) client_id,
---     (SELECT id FROM m_group WHERE external_id = sv.group_external_id) group_id,
---     (SELECT id FROM m_savings_product WHERE description = sv.product_id) product_id,
---     status_enum,
---     deposit_type_enum,
---     submittedon_date,
---     approvedon_date,
---     rejectedon_date,
---     withdrawnon_date,
---     activatedon_date,
---     closedon_date,
---     currency_code,
---     currency_digits,
---     currency_multiplesof,
---     COALESCE(interestrate, 0),
---     interest_compounding_period_enum,
---     interest_posting_period_enum,
---     interest_calculation_type_enum,
---     interest_calculation_days_in_year_type_enum,
---     min_required_opening_balance,
---     lockin_period_frequency,
---     lockin_period_frequency_enum,
---     withdrawal_fee_for_transfer,
---     allow_overdraft,
---     overdraft_limit,
---     nominal_annual_interest_rate_overdraft,
---     account_balance,
---     withhold_tax
--- FROM m_savings_account_view2 sv;
+ INSERT INTO m_savings_account (account_no, external_id, client_id, group_id, product_id, status_enum, deposit_type_enum, submittedon_date, approvedon_date, rejectedon_date, withdrawnon_date, activatedon_date, closedon_date, currency_code, currency_digits, currency_multiplesof,
+ nominal_annual_interest_rate, interest_compounding_period_enum, interest_posting_period_enum, interest_calculation_type_enum, interest_calculation_days_in_year_type_enum, min_required_opening_balance, lockin_period_frequency, lockin_period_frequency_enum, withdrawal_fee_for_transfer,
+ allow_overdraft, overdraft_limit, nominal_annual_interest_rate_overdraft, account_balance_derived, withhold_tax)
+ SELECT
+     account_no,
+     external_id,
+     (SELECT id FROM m_client WHERE external_id = sv.client_external_id) client_id,
+     (SELECT id FROM m_group WHERE external_id = sv.group_external_id) group_id,
+     (SELECT id FROM m_savings_product WHERE description = sv.product_id) product_id,
+     status_enum,
+     deposit_type_enum,
+     submittedon_date,
+     approvedon_date,
+     rejectedon_date,
+     withdrawnon_date,
+     activatedon_date,
+     closedon_date,
+     currency_code,
+     currency_digits,
+     currency_multiplesof,
+     COALESCE(interestrate, 0),
+     interest_compounding_period_enum,
+     interest_posting_period_enum,
+     interest_calculation_type_enum,
+     interest_calculation_days_in_year_type_enum,
+     min_required_opening_balance,
+     lockin_period_frequency,
+     lockin_period_frequency_enum,
+     withdrawal_fee_for_transfer,
+     allow_overdraft,
+     overdraft_limit,
+     nominal_annual_interest_rate_overdraft,
+     account_balance,
+     withhold_tax
+ FROM m_savings_account_view2 sv;
 
 INSERT INTO m_savings_account_interest_rate_chart (savings_account_id, from_date)
 SELECT id, submittedon_date
@@ -416,22 +416,22 @@ SELECT
     reversal_transaction_key
 FROM m_savings_account_transaction_view stv WHERE transaction_amount IS NOT NULL;
 
--- INSERT INTO m_savings_account_transaction (savings_account_id, office_id, encoded_key, payment_detail_id, transaction_type_enum, is_reversed, 
---     transaction_date, amount, overdraft_amount_derived, running_balance_derived, created_date, ref_no)
--- SELECT
---     (SELECT id FROM m_savings_account WHERE external_id = stv.account_external_id) savings_account_id,
---     1 office_id,
---     external_id,
---     (SELECT id FROM m_payment_detail WHERE transaction_external_id = stv.external_id) payment_detail_id,
---     transaction_type_enum,
---     is_reversed,
---     transaction_date,
---     transaction_amount,
---     overdraft_amount,
---     running_balance,
---     creation_date,
---     reversal_transaction_key
--- FROM m_savings_account_transaction_view2 stv WHERE transaction_amount IS NOT NULL;
+ INSERT INTO m_savings_account_transaction (savings_account_id, office_id, encoded_key, payment_detail_id, transaction_type_enum, is_reversed,  
+     transaction_date, amount, overdraft_amount_derived, running_balance_derived, created_date, ref_no)
+ SELECT
+     (SELECT id FROM m_savings_account WHERE external_id = stv.account_external_id) savings_account_id,
+     1 office_id,
+     external_id,
+     (SELECT id FROM m_payment_detail WHERE transaction_external_id = stv.external_id) payment_detail_id,
+     transaction_type_enum,
+     is_reversed,
+     transaction_date,
+     transaction_amount,
+     overdraft_amount,
+     running_balance,
+     creation_date,
+     reversal_transaction_key
+ FROM m_savings_account_transaction_view2 stv WHERE transaction_amount IS NOT NULL; 
 
 UPDATE m_savings_account_transaction t1 SET original_transaction_id = t2.id
 FROM m_savings_account_transaction t2

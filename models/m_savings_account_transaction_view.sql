@@ -15,7 +15,7 @@ WITH base AS (
         LINKEDSAVINGSTRANSACTIONKEY as linked_savings_transaction_key,
         OVERDRAFTAMOUNT as overdraft_amount,
         ENTRYDATE as transaction_date
-    FROM {{ ref('savingstransaction') }}
+    FROM {{ ref('final_investment_transaction') }}
 ),
 
 transaction_details AS (

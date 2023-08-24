@@ -19,25 +19,50 @@ WITH base AS (
 ),
 
 client_view AS (
-    SELECT * 
+    SELECT id, external_id 
     FROM m_client_view
+
+    UNION
+
+    SELECT id, external_id 
+    FROM m_client
 ),
 
 group_view AS (
-    SELECT * 
+    SELECT id, external_id 
     FROM m_group_view
+
+    UNION 
+
+    SELECT id, external_id 
+    FROM m_group
 ),
 office_view AS (
-    SELECT * 
+    SELECT id,external_id
     FROM m_office_view
+
+    UNION
+
+    SELECT id,external_id
+    FROM m_office
 ),
 staff_view AS (
-    SELECT *
+    SELECT id,external_id
     FROM m_staff_view
+
+    UNION 
+
+    SELECT id,external_id
+    FROM m_staff
 ),
 product_view AS (
-    SELECT *
+    SELECT external_id
     FROM m_product_loan_view
+
+    UNION
+
+    SELECT external_id
+    FROM m_product_loan
 )
 
 SELECT 

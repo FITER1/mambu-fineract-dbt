@@ -6,7 +6,7 @@ WITH source AS (
         "ID" as id,
         "NAME" AS name,
         CREATIONDATE as opening_date
-    FROM branch
+    FROM final_branch
 )
 
 SELECT

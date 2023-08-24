@@ -30,18 +30,37 @@ WITH base AS (
 ),
 
 client_view AS (
-    SELECT *
+    SELECT id, external_id 
     FROM m_client_view
+
+    UNION
+
+    SELECT id, external_id 
+    FROM m_client
 ),
 
 group_view AS (
-    SELECT *
+    SELECT id, external_id 
     FROM m_group_view
+
+    UNION 
+
+    SELECT id, external_id 
+    FROM m_group
 ),
 
 product_view AS (
-    SELECT *
+    SELECT external_id,currency_code,currency_digits,currency_multiplesof,interest_compounding_period_enum,
+    interest_posting_period_enum,interest_calculation_type_enum,interest_calculation_days_in_year_type_enum,
+    min_required_opening_balance,lockin_period_frequency,lockin_period_frequency_enum,withdrawal_fee_for_transfer
     FROM m_savings_product_view
+    
+    UNION
+    
+    SELECT description,currency_code,currency_digits,currency_multiplesof,interest_compounding_period_enum,
+    interest_posting_period_enum,interest_calculation_type_enum,interest_calculation_days_in_year_type_enum,
+    min_required_opening_balance,lockin_period_frequency,lockin_period_frequency_enum,withdrawal_fee_for_transfer
+    FROM m_savings_product
 ),
 
 interest_settings AS (
@@ -63,7 +82,7 @@ SELECT
         ELSE 100
     END as deposit_type_enum,
     CASE
-        WHEN b.account_state  = 'MATURED' THEN 300
+        WHEN b.account_state  = 'MATURED' THEN 800
         WHEN b.account_state = 'WITHDRAWN' THEN 400
         WHEN b.account_state  = 'CLOSED' THEN 600
         WHEN b.account_state = 'ACTIVE' THEN 300
