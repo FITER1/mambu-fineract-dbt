@@ -3,7 +3,10 @@
         materialized = 'table'
     )
 }}
-
+{{ adapter.get_relation('m_client_view') }}
+{{ adapter.get_relation('m_group_view') }}
+{{ adapter.get_relation('m_office_view') }}
+{{ adapter.get_relation('m_product_loan_view') }}
 WITH base AS (
     SELECT *,
         encodedkey as external_id,

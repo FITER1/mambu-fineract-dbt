@@ -1,7 +1,9 @@
 {% macro decode_base64(field) %}
     CONVERT_FROM(DECODE({{ field }}, 'base64'), 'utf-8')
 {% endmacro %}
-
+{{ adapter.get_relation('m_office_view') }}
+{{ adapter.get_relation('m_staff_view') }}
+{{ adapter.get_relation('m_loan_view') }}
 WITH type_mapping AS (
     SELECT * 
     FROM (VALUES 
@@ -10,6 +12,33 @@ WITH type_mapping AS (
         ('WRITEOFF', 'WRITE_OFF'),
         ('INITIATE_TRANSFER', 'TRANSFER')
     ) AS v(original, mapped)
+),
+mv_office AS (
+    SELECT id,external_id
+    FROM m_office_view
+
+    UNION
+
+    SELECT id,external_id
+    FROM m_office
+),
+mv_staff AS (
+    SELECT id,external_id
+    FROM m_staff_view
+
+    UNION 
+
+    SELECT id,external_id
+    FROM m_staff
+),
+mv_loan AS (
+    SELECT id,external_id
+    FROM m_loan_view
+
+    UNION 
+
+    SELECT id,external_id
+    FROM m_loan
 ),
 decoded_loantransaction AS (
     SELECT
@@ -74,12 +103,12 @@ loan_transactions AS (
         mv_loan.external_id as loan_external_id
     FROM decoded_loantransaction AS dlt
     LEFT JOIN type_mapping tm ON dlt.transaction_type_raw = tm.original
-    LEFT JOIN {{ ref('m_office_view') }} AS mv_office ON dlt.branch_key = mv_office.external_id
-    LEFT JOIN {{ ref('m_staff_view') }} AS mv_staff ON dlt.user_key = mv_staff.external_id
-    LEFT JOIN {{ ref('m_loan_view') }} AS mv_loan ON dlt.parent_id = mv_loan.external_id
+    LEFT JOIN  mv_office ON dlt.branch_key = mv_office.external_id
+    LEFT JOIN  mv_staff ON dlt.user_key = mv_staff.external_id
+    LEFT JOIN  mv_loan ON dlt.parent_id = mv_loan.external_id
 )
 
 SELECT 
     lt.*
 FROM loan_transactions AS lt
-LEFT JOIN {{ ref('m_loan_view') }} AS mv_loan ON lt.external_id = mv_loan.external_id
+LEFT JOIN  mv_loan ON lt.external_id = mv_loan.external_id
