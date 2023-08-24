@@ -1,9 +1,9 @@
 {% macro decode_base64(field) %}
     CONVERT_FROM(DECODE({{ field }}, 'base64'), 'utf-8')
 {% endmacro %}
-{{ adapter.get_relation('m_office_view') }}
-{{ adapter.get_relation('m_staff_view') }}
-{{ adapter.get_relation('m_loan_view') }}
+{{ adapter.get_relation('public','m_office_view') }}
+{{ adapter.get_relation('public','m_staff_view') }}
+{{ adapter.get_relation('public','m_loan_view') }}
 WITH type_mapping AS (
     SELECT * 
     FROM (VALUES 

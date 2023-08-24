@@ -1,5 +1,5 @@
 {{ config(materialized='table') }}
-{{ adapter.get_relation('m_loan_view') }}
+{{ adapter.get_relation('public','m_loan_view') }}
 WITH decoded_repayment AS (
     SELECT
         ROW_NUMBER() OVER (ORDER BY ENCODEDKEY) as id,

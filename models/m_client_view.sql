@@ -3,8 +3,8 @@
         materialized = 'table'
     )
 }}
-{{ adapter.get_relation('m_office_view') }}
-{{ adapter.get_relation('m_staff_view') }}
+{{ adapter.get_relation('public','m_office_view') }}
+{{ adapter.get_relation('public','m_staff_view') }}
 
 WITH base AS (
     SELECT 
