@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
-{{ adapter.get_relation('public','m_role_view') }}
-{{ adapter.get_relation('public','m_office_view') }}
+{{ load_relation(ref('m_role_view')) }}
+{{ load_relation(ref('m_office_view')) }}
 
 
 WITH branch_office AS (

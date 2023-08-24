@@ -3,8 +3,8 @@
         materialized='table'
     )
 }}
-{{ adapter.get_relation('public','m_office_view') }}
-{{ adapter.get_relation('public','m_staff_view') }}
+{{ load_relation(ref('m_office_view')) }}
+{{ load_relation(ref('m_staff_view')) }}
 WITH office_view AS (
     SELECT id,external_id
     FROM m_office_view

@@ -1,7 +1,7 @@
 {{ config(materialized='table') }}
-{{ adapter.get_relation('public','m_client_view') }}
-{{ adapter.get_relation('public','m_group_view') }}
-{{ adapter.get_relation('public','m_savings_product_view') }}
+{{ load_relation(ref('m_client_view')) }}
+{{ load_relation(ref('m_group_view')) }}
+{{ load_relation(ref('m_savings_product_view')) }}
 
 WITH base AS (
     SELECT *,

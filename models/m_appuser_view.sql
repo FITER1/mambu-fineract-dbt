@@ -1,5 +1,5 @@
 {{ config(materialized='table') }}
-{{ adapter.get_relation('public','m_staff_view') }}
+{{ load_relation(ref('m_staff_view')) }}
 
 WITH decoded_user AS (
     SELECT 
