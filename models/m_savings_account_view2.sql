@@ -69,7 +69,7 @@ interest_settings AS (
 )
 
 SELECT
-    ROW_NUMBER() OVER () as id,
+    ROW_NUMBER() OVER ()+(SELECT MAX(id) FROM "public"."m_savings_account") as id,
     b.external_id,
     b.account_no,
     pv.external_id as product_id,

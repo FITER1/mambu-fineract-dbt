@@ -24,7 +24,7 @@ transaction_details AS (
 )
 
 SELECT
-    ROW_NUMBER() OVER () as id,
+    ROW_NUMBER() OVER ()+(SELECT MAX(id) FROM "public"."m_savings_account_transaction") as id,
     b.external_id,
     b.transaction_amount,
     b.account_external_id,

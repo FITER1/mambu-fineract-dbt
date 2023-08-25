@@ -66,7 +66,7 @@ product_view AS (
 )
 
 SELECT 
-    ROW_NUMBER() OVER () as id,
+    ROW_NUMBER() OVER () +(SELECT MAX(id) FROM "public"."m_loan") as id,
     b.external_id,
     b."ID" as account_no,
     pv.external_id as product_id,

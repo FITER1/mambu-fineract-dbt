@@ -50,7 +50,7 @@ WITH source AS (
 )
 
 SELECT
-    ROW_NUMBER() OVER () as id,
+    ROW_NUMBER() OVER ()+(SELECT MAX(id) FROM "public"."m_product_loan") as id,
     NULL as short_name,
     currency_code currency_code,
     cast(0 as int4) as currency_digits,

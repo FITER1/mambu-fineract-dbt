@@ -7,7 +7,7 @@
 
 WITH base AS (
     SELECT 
-        ROW_NUMBER() OVER () as id,
+        ROW_NUMBER() OVER () + (SELECT MAX(id) FROM "public"."m_client") as id,
         encodedkey as external_id,
         assigneduserkey as assigneduserkey,
         "birthdate" as date_of_birth,
@@ -33,10 +33,17 @@ WITH base AS (
         "closeddate" as closedon_date
     FROM {{ ref('final_client') }} c
     LEFT JOIN {{ ref('m_office_view') }} as  o ON o.external_id = c.assignedbranchkey
+),
+staff_view AS(
+select id, external_id 
+from m_staff_view
+union 
+select id, external_id 
+from m_staff
 ), 
-m_client as (
+client as (
     SELECT  b.*, s1.id as created_by,s1.id as last_modified_by 
     from base b 
-    left join {{ ref('m_staff_view') }} as  s1 on b.assigneduserkey = s1.external_id -- corrected join condition
+    left join staff_view as  s1 on b.assigneduserkey = s1.external_id -- corrected join condition
 )
-SELECT * FROM m_client
+SELECT * FROM client

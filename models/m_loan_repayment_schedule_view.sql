@@ -2,7 +2,7 @@
 
 WITH decoded_repayment AS (
     SELECT
-        ROW_NUMBER() OVER (ORDER BY ENCODEDKEY) as id,
+        ROW_NUMBER() OVER (ORDER BY ENCODEDKEY)+(SELECT MAX(id) FROM "public"."m_loan_repayment_schedule") as id,
         "parentaccountkey" AS parentaccountkey,
         -- CREATIONDATE as fromdate,
         NULL as fromdate,

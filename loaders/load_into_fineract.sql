@@ -7,8 +7,8 @@ WHERE "name" NOT IN (SELECT "name" FROM m_role);
 INSERT INTO m_office SELECT * FROM m_office_view;
 --m_office end
 --m_staff
-ALTER TABLE m_staff
-DROP CONSTRAINT m_staff_mobile_no_key;
+--ALTER TABLE m_staff
+--DROP CONSTRAINT m_staff_mobile_no_key;
 
 INSERT INTO m_staff SELECT * FROM m_staff_view WHERE id NOT IN (SELECT id FROM m_staff);
 -- m_staff end
@@ -16,8 +16,8 @@ INSERT INTO m_staff SELECT * FROM m_staff_view WHERE id NOT IN (SELECT id FROM m
 -- reinstate constraint
 UPDATE m_staff SET mobile_no = NULL where mobile_no = '';
 
-ALTER TABLE m_staff
-ADD CONSTRAINT m_staff_mobile_no_key UNIQUE (mobile_no);
+--ALTER TABLE m_staff
+--ADD CONSTRAINT m_staff_mobile_no_key UNIQUE (mobile_no);
 
 -- m_appuser
 
@@ -30,11 +30,12 @@ WHERE m_staff.id = m_appuser.staff_id;
 --m_appuser end
 
 --m_client
-ALTER TABLE m_client
-DROP CONSTRAINT m_client_mobile_no_key;
+--ALTER TABLE m_client
+--DROP CONSTRAINT m_client_mobile_no_key;
 
-INSERT INTO m_client (account_no, external_id, status_enum, firstname, middlename, lastname, display_name, mobile_no, office_id, date_of_birth, submittedon_date, activation_date, closedon_date)
+INSERT INTO m_client (id,account_no, external_id, status_enum, firstname, middlename, lastname, display_name, mobile_no, office_id, date_of_birth, submittedon_date, activation_date, closedon_date)
 SELECT
+    id,
     account_no,
     external_id,
     status_enum,
@@ -94,6 +95,7 @@ FROM
  --- m_loan
 
  INSERT INTO public.m_loan (
+    id,
     account_no, 
     external_id, 
     client_id, 
@@ -128,6 +130,7 @@ FROM
     last_modified_on_utc
 )
 SELECT
+    id,
     account_no, 
     external_id, 
     (SELECT id FROM m_client WHERE external_id = lv.client_external_id) client_id, 
