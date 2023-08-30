@@ -236,7 +236,7 @@ SELECT
 FROM m_loan_transaction_view ltv LEFT JOIN m_loan_transaction lt
 ON ltv.external_id = lt.external_id
 WHERE lt.id IS NULL
-) tmp WHERE tmp.loan_id IS NOT NULL;
+) tmp WHERE tmp.loan_id IS NOT NULL and transaction_type_enum IS not null;
 
 UPDATE m_loan_transaction
 SET office_id = m_client.office_id

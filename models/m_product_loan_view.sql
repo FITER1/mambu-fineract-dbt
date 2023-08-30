@@ -47,6 +47,7 @@ WITH source AS (
     ON lp.INTERESTRATESETTINGSKEY = ips.ENCODEDKEY
     JOIN {{ ref('productarrearssettings') }} as pas
     ON lp.ARREARSSETTINGSKEY = pas.ENCODEDKEY
+    where activated = true
 )
 
 SELECT
