@@ -32,21 +32,11 @@ WITH base AS (
 client_view AS (
     SELECT id, external_id 
     FROM {{ ref('m_client_view') }}
-
-    UNION
-
-    SELECT id, external_id 
-    FROM m_client
 ),
 
 group_view AS (
     SELECT id, external_id 
     FROM {{ ref('m_group_view') }}
-
-    UNION 
-
-    SELECT id, external_id 
-    FROM m_group
 ),
 
 product_view AS (
