@@ -24,11 +24,6 @@ WITH decoded_repayment AS (
 mv_loan AS (
     SELECT id,external_id,account_no
     FROM {{ ref('m_loan_view') }}
-
-    UNION 
-
-    SELECT id,external_id,account_no
-    FROM m_loan
 ),
 repayment_with_loan_id AS (
     SELECT 
