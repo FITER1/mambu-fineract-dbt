@@ -6,7 +6,7 @@ JOIN disbursementdetails ON final_loanaccount.disbursementdetailskey = disbursem
 WHERE m_loan.external_id = final_loanaccount.encodedkey
 AND m_loan.disbursedon_date IS NULL;
 
-
+truncate table temp_saving_account;
 
 insert into temp_saving_account
 (
