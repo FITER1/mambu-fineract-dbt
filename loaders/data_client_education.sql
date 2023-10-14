@@ -1,9 +1,9 @@
 -- Education
 INSERT INTO "Education" (client_id, "Level of Education_cd_Level of Education")
 SELECT 
-(SELECT id FROM m_client WHERE external_id = c.ENCODEDKEY)::integer client_id,
+id,
 ed.education
-FROM final_client c
+FROM m_client c
 JOIN 
 	(SELECT
 		PARENTKEY,
@@ -18,7 +18,8 @@ JOIN
 		END AS education
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8a5ced2443e0bf990143e2cc53c014d1') ed
-ON c.ENCODEDKEY = ed.PARENTKEY;
+ON c.external_id = ed.PARENTKEY
+on conflict (client_id) do nothing;
 
 -- Education end
 

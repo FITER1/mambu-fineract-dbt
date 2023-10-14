@@ -2,37 +2,36 @@
 INSERT INTO "Basic Details"
 SELECT tmp.* FROM (
 SELECT 
-(SELECT id FROM m_group WHERE external_id = g.ENCODEDKEY) group_id,
+id,
 mob.mobile_no,
 othn.other_no,
 e.email,
 NULL::integer loan_cycle,
 NULL::integer preferred_language,
 NULL group_role_key,
-g.creationdate,
-g.creationdate
-FROM final_group g
+g.submittedon_date,
+g.submittedon_date
+FROM m_group g
 JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS mobile_no
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8abcdeb5488b3dea0148a1e811880284') mob
-ON g.ENCODEDKEY = mob.PARENTKEY
+ON g.external_id = mob.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS other_no
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8abcdeb5488b3dea0148a2372abb2d94') othn
-ON g.ENCODEDKEY = othn.PARENTKEY
+ON g.external_id = othn.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS email
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8abcdeb5488b3dea0148a239c1432f43') e
-ON g.ENCODEDKEY = e.PARENTKEY
+ON g.external_id = e.PARENTKEY
 ) tmp
-WHERE tmp.group_id IS NOT NULL;
+WHERE tmp.id IS NOT NULL
+on conflict(group_id) do nothing;
 
 -- Basic Details end
-
-		

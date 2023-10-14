@@ -2,7 +2,7 @@
 INSERT INTO "Business Details"
 SELECT tmp.* FROM (
 SELECT 
-(SELECT id FROM m_group WHERE external_id = g.ENCODEDKEY) group_id,
+id,
 rc.rc_number,
 tin.tin,
 lga.local_govt_area,
@@ -24,33 +24,33 @@ va.verified_account::bit,
 obvn.bvn,
 mid.merchant_id,
 ocn.onboarding_channel,
-g.creationdate,
-g.creationdate
-FROM final_group g
+g.submittedon_date,
+g.submittedon_date
+FROM m_group g
 JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS rc_number
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8abcdeb5488b3dea0148a181f35a2957') rc
-ON g.ENCODEDKEY = rc.PARENTKEY
+ON g.external_id = rc.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS tin
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586ef7f6bdf43017f6df133772905') tin
-ON g.ENCODEDKEY = tin.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a8188a852ab5a620152b223f4ff1e27') tin
+ON g.external_id = tin.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS local_govt_area
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8abcdeb5488b3dea0148a1e6f946021b') lga
-ON g.ENCODEDKEY = lga.PARENTKEY
+ON g.external_id = lga.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS start_date
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586ef7f6bdf43017f6fa591904dbe') bsd
-ON g.ENCODEDKEY = bsd.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8abcdeb5488b3dea0148a17a41862757') bsd
+ON g.external_id = bsd.PARENTKEY
 LEFT JOIN 
 	(SELECT
 		PARENTKEY,
@@ -62,8 +62,8 @@ LEFT JOIN
 			ELSE NULL 
 		END AS no_of_locations
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586ef7f6bdf43017f6dfbc2d32971') loc
-ON g.ENCODEDKEY = loc.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a8188a852ab5a620152b242857e2673') loc
+ON g.external_id = loc.PARENTKEY
 LEFT JOIN 
 	(SELECT
 		PARENTKEY,
@@ -73,8 +73,8 @@ LEFT JOIN
 			ELSE NULL 
 		END AS owns_business
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586ef7f6bdf43017f6df1337228ff') ob
-ON g.ENCODEDKEY = ob.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a8188a852ab5a620152b2441f8826cc') ob
+ON g.external_id = ob.PARENTKEY
 LEFT JOIN 
 	(SELECT
 		PARENTKEY,
@@ -86,8 +86,8 @@ LEFT JOIN
 			ELSE NULL 
 		END AS staff_size
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586ef7f6bdf43017f703548495632') ss
-ON g.ENCODEDKEY = ss.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a8188a852ab5a620152b2499311279b') ss
+ON g.external_id = ss.PARENTKEY
 LEFT JOIN 
 	(SELECT
 		PARENTKEY,
@@ -101,8 +101,8 @@ LEFT JOIN
 			ELSE NULL 
 		END AS average_sales
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586ef7f6bdf43017f6df870232959') avgs
-ON g.ENCODEDKEY = avgs.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a8188a852ab5a620152b251f6b82920') avgs
+ON g.external_id = avgs.PARENTKEY
 LEFT JOIN 
 	(SELECT
 		PARENTKEY,
@@ -113,26 +113,26 @@ LEFT JOIN
 			ELSE NULL 
 		END AS sector_served
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586ef7f6bdf43017f703e619756c1') sec
-ON g.ENCODEDKEY = sec.PARENTKEY 
+	WHERE CUSTOMFIELDKEY = '8a8188a852ab5a620152b24c3e5a281c') sec
+ON g.external_id = sec.PARENTKEY 
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS withdrawal_limit
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8587bb6ae93b0c016afeba63dd7ca5') kwl
-ON g.ENCODEDKEY = kwl.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858ef16b4d8e0c016b5112a8662451') kwl
+ON g.external_id = kwl.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS overdraft_limit
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8587bb6ae93b0c016afec1f3067ede') kol
-ON g.ENCODEDKEY = kol.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858ef16b4d8e0c016b5113d84b2477') kol
+ON g.external_id = kol.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS deposit_limit
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8587bb6ae93b0c016afec5b98e7f14') kdl
-ON g.ENCODEDKEY = kdl.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858ef16b4d8e0c016b5117aaac25a2') kdl
+ON g.external_id = kdl.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		CASE
@@ -141,29 +141,28 @@ LEFT JOIN (SELECT
 		  	ELSE NULL
 		END AS verified_account
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8587bb6ae93b0c016afec5b98e7f18') va
-ON g.ENCODEDKEY = va.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858ef16b4d8e0c016b511acf9d2630') va
+ON g.external_id = va.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS bvn
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8587bb6ae93b0c016af8cf98bf7054') obvn
-ON g.ENCODEDKEY = obvn.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858ef16b4d8e0c016b511e72d5268f') obvn
+ON g.external_id = obvn.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS merchant_id
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8587506b566dfd016b652cda572b98') mid
-ON g.ENCODEDKEY = mid.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858ef36b63f9fd016b653e98270137') mid
+ON g.external_id = mid.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS onboarding_channel
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8587ff82d451250182d549cd6d1571') ocn
-ON g.ENCODEDKEY = ocn.PARENTKEY 
+	WHERE CUSTOMFIELDKEY = '8a858eb38388f8ea01838d784f3d5292') ocn
+ON g.external_id = ocn.PARENTKEY 
 ) tmp
-WHERE tmp.group_id IS NOT NULL;
+WHERE tmp.id IS NOT NULL
+on conflict(group_id) do nothing;
 
 -- Business Details end
-
-		

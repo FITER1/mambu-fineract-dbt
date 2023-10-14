@@ -2,7 +2,7 @@
 INSERT INTO "Additional Loan Information"
 SELECT tmp.* FROM (
 SELECT 
-(SELECT id FROM m_loan WHERE external_id = l.ENCODEDKEY) loan_id,
+(SELECT id FROM m_loan WHERE external_id = l.external_id) loan_id,
 lr.reapplied::bit,
 lcm.closed_at_migration::bit,
 lp.purpose,
@@ -26,7 +26,7 @@ mid.merchant_id,
 prid.purchase_ref_id,
 macc.merchant_account_no,
 icz.is_carbon_zero_loan::bit
-FROM final_loanaccount l
+FROM m_loan l
 JOIN (SELECT
 		PARENTKEY,
 		CASE
@@ -36,7 +36,7 @@ JOIN (SELECT
 		END AS reapplied
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8a6b840a4202095c01420412a1d44ac9') lr
-ON l.ENCODEDKEY = lr.PARENTKEY
+ON l.external_id = lr.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		CASE
@@ -46,31 +46,31 @@ LEFT JOIN (SELECT
 		END AS closed_at_migration
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8af82d3f42103a7a014212ecd7e72237') lcm
-ON l.ENCODEDKEY = lcm.PARENTKEY
+ON l.external_id = lcm.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS purpose
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8a5ced2443e0bf990143e2e8b407248f') lp
-ON l.ENCODEDKEY = lp.PARENTKEY
+ON l.external_id = lp.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS start_date
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8a2898ea4467f87b014469c180447364') rsd
-ON l.ENCODEDKEY = rsd.PARENTKEY
+ON l.external_id = rsd.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS end_date
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8a2898ea4467f87b014469c20b2073f8') red
-ON l.ENCODEDKEY = red.PARENTKEY
+ON l.external_id = red.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS disbursed_amount
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8a362e6b44cebb590144d5ab865f028c') disb
-ON l.ENCODEDKEY = disb.PARENTKEY
+ON l.external_id = disb.PARENTKEY
 LEFT JOIN 
 	(SELECT
 		PARENTKEY,
@@ -83,20 +83,20 @@ LEFT JOIN
 			ELSE NULL 
 		END AS disbursement_status
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586df5742ce3901574cca1888641a') ds
-ON l.ENCODEDKEY = ds.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858e845800dfc001580712758c157b') ds
+ON l.external_id = ds.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS loan_channel
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a85871a54a057ca0154c43f8ed90976') lc
-ON l.ENCODEDKEY = lc.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a85892854be331a0154c3fcf9ee6aee') lc
+ON l.external_id = lc.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS device_id
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a85872654ece6b70154f1bc06804194') di
-ON l.ENCODEDKEY = di.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858f1554e294490154f1c2fc040b3f') di
+ON l.external_id = di.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		CASE
@@ -105,80 +105,80 @@ LEFT JOIN (SELECT
 		  	ELSE NULL
 		END AS top_up_loan
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a85872655169137015516de530102fb') tul
-ON l.ENCODEDKEY = tul.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858fe55511cbce01551744b99d3b25') tul
+ON l.external_id = tul.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS referral_client_id
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586e559b1c3810159cafd4d1f3465') rci
-ON l.ENCODEDKEY = rci.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858fc959bc56c80159cb06ee767018') rci
+ON l.external_id = rci.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS rebate_code
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586b95a5bb7e4015a66a2f8e93036') rc
-ON l.ENCODEDKEY = rc.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858f0e5a6171ba015a66adb57d1132') rc
+ON l.external_id = rc.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS rebate_amount
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586b95a5bb7e4015a66a2f9103046') ra
-ON l.ENCODEDKEY = ra.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858f0e5a6171ba015a66aed66e1178') ra
+ON l.external_id = ra.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS application_id
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586545cd00919015cd04eab1d4797') apid
-ON l.ENCODEDKEY = apid.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858f9f5dd14307015ddb6f8d9029e1') apid
+ON l.external_id = apid.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS desired_amount
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586545cd00919015cd055e71c47fb') desa
-ON l.ENCODEDKEY = desa.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858f9f5dd14307015ddb714b212a66') desa
+ON l.external_id = desa.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS delay_reason
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8587516ae44d0c016ae463ee6a30d5') dr
-ON l.ENCODEDKEY = dr.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858f926b715531016b715d74f101d3') dr
+ON l.external_id = dr.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS loan_cashback_amount
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586f36cb37dbd016cb948d90c07d2') lca
-ON l.ENCODEDKEY = lca.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858eb36cf61a27016cf7a4ef21141b') lca
+ON l.external_id = lca.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS loan_cashback_percent
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586f36cb37dbd016cb97dd5020dc4') lcp
-ON l.ENCODEDKEY = lcp.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858eb36cf61a27016cf7a5d857146c') lcp
+ON l.external_id = lcp.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS disb_channel_key
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586fc6d8cf6b8016d90efdff61b9a') dck
-ON l.ENCODEDKEY = dck.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858f3a6d90af22016d930c92186924') dck
+ON l.external_id = dck.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS merchant_id
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586e383719eba01837acc117d3fff') mid
-ON l.ENCODEDKEY = mid.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858ee88442731f01844e5cc0617c44') mid
+ON l.external_id = mid.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS purchase_ref_id
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586e383719eba01837ad274d54009') prid
-ON l.ENCODEDKEY = prid.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858ee88442731f01844e5e01aa7c9a') prid
+ON l.external_id = prid.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS merchant_account_no
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a85874385d1bffd0185db1a88d70a26') macc
-ON l.ENCODEDKEY = macc.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858ffe8683c74401868ac9054942c1') macc
+ON l.external_id = macc.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		CASE
@@ -187,10 +187,10 @@ LEFT JOIN (SELECT
 		  	ELSE NULL
 		END AS is_carbon_zero_loan
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a85874385d1bffd0185db26e7f10a66') icz
-ON l.ENCODEDKEY = icz.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858ffe8683c74401868aca630f43fd') icz
+ON l.external_id = icz.PARENTKEY
  ) tmp
-WHERE tmp.loan_id IS NOT NULL;
+on conflict (loan_id) do nothing;
 
 -- Additional Loan Information end
 

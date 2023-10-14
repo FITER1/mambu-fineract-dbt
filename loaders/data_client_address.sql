@@ -3,7 +3,7 @@ INSERT INTO "Client Address" (client_id, "Client Address Line1", "Client Address
 							 "Client City", "STATE_cd_Client Region", "COUNTRY_cd_Client country", 
 							  "Client Postcode", "Client Longitude", "Client Latitude")
 SELECT 
-(SELECT id FROM m_client WHERE external_id = c.ENCODEDKEY)::integer client_id,
+id,
 add1.address1,
 add2.address2,
 NULL AS city,
@@ -12,19 +12,19 @@ st.state,
 NULL AS postal_code,
 lon.longitude,
 lat.latitude
-FROM final_client c
+FROM m_client c
 JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS address1
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a85872982d7f0560182d91c8ee3131f') add1
-ON c.ENCODEDKEY = add1.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8abcdeb5488b3dea0148a1d9746b77eb') add1
+ON c.external_id = add1.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS address2
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a85872982d7f0560182d91c8ee3131f') add2
-ON c.ENCODEDKEY = add2.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8abcdeb5488b3dea0148a1d9746b77eb') add2
+ON c.external_id = add2.PARENTKEY
 JOIN 
 	(SELECT
 		PARENTKEY,
@@ -70,19 +70,19 @@ JOIN
 		END AS state
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8aad33cd46f34dc80146fb73c1b85735') st
-ON c.ENCODEDKEY = st.PARENTKEY
+ON c.external_id = st.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS latitude
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8ae518cd4eb16523014eb173bffe000d') lat
-ON c.ENCODEDKEY = lat.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a18227c4fcc2e39014fdbf7274f1d45') lat
+ON c.external_id = lat.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS longitude
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a16d97a4e9cc2f3014eabe29c0812ae') lon
-ON c.ENCODEDKEY = lon.PARENTKEY;
+	WHERE CUSTOMFIELDKEY = '8a18227c4fcc2e39014fdbf6d1de1d32') lon
+ON c.external_id = lon.PARENTKEY;
 
 -- Client Address end
 

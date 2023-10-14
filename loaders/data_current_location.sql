@@ -1,30 +1,29 @@
 -- Current Location
 INSERT INTO "Current Location"
 SELECT 
-(SELECT id FROM m_client WHERE external_id = c.ENCODEDKEY)::integer client_id,
+id,
 loc."location",
 lon.longitude,
 lat.latitude
-FROM final_client c
+FROM m_client c
 JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS "location"
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a08c1984f8f4464014f97a7efbf3821') loc
-ON c.ENCODEDKEY = loc.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a18227c4fcc2e39014fdbf777cb1deb') loc
+ON c.external_id = loc.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS longitude
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a16d97a4e9cc2f3014eabe29c0812ae') lon
-ON c.ENCODEDKEY = lon.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a18227c4fcc2e39014fdbf6d1de1d32') lon
+ON c.external_id = lon.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS latitude
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8ae518cd4eb16523014eb173bffe000d') lat
-ON c.ENCODEDKEY = lat.PARENTKEY;
+	WHERE CUSTOMFIELDKEY = '8a18227c4fcc2e39014fdbf7274f1d45') lat
+ON c.external_id = lat.PARENTKEY
+on conflict(client_id) do nothing;
 
 -- Current Location end
-
-		

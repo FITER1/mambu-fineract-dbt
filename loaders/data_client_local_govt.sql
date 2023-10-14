@@ -1,12 +1,13 @@
 -- Local Government
 INSERT INTO "Local Government"
 SELECT 
-(SELECT id FROM m_client WHERE external_id = c.ENCODEDKEY)::integer client_id,
+id,
 lga.local_govt
-FROM final_client c
+FROM m_client c
 JOIN (SELECT
 		PARENTKEY,
 		"VALUE" local_govt
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8587ff5826ac510158299815e32f1e') lga
-ON c.ENCODEDKEY = lga.PARENTKEY;
+	WHERE CUSTOMFIELDKEY = '8a858e65582a517e0158404f592c63ec') lga
+ON c.external_id = lga.PARENTKEY
+on conflict(client_id) do nothing;

@@ -1,7 +1,7 @@
 -- Client Scores
 INSERT INTO "Client Scores"
 SELECT 
-(SELECT id FROM m_client WHERE external_id = c.ENCODEDKEY)::integer client_id,
+id,
 cs.scores::integer,
 ls.lenddo_scores,
 cbs.credit_bureau_score,
@@ -9,51 +9,50 @@ cl.credit_limit::numeric,
 lp.loyalty_points,
 ofs.onefi_score::numeric,
 js.jasmine_score::numeric
-FROM final_client c
+FROM m_client c
 JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS scores
 	FROM customfieldvalue
 	WHERE CUSTOMFIELDKEY = '8aab1626499c2c4301499e2a0e6f57b7'
 		  AND "VALUE" NOT LIKE '%fg%') cs
-ON c.ENCODEDKEY = cs.PARENTKEY
+ON c.external_id = cs.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS lenddo_scores
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a69e92350133b0a01501929c7b9662d') ls
-ON c.ENCODEDKEY = ls.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a132cd150184bef0150193153eb578e') ls
+ON c.external_id = ls.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS credit_bureau_score
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a69e92350133b0a0150192e6734664d') cbs
-ON c.ENCODEDKEY = cbs.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a132cd150184bef01501931d35a582d') cbs
+ON c.external_id = cbs.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS credit_limit
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a85864c562cb88c015637bb5f947c70') cl
-ON c.ENCODEDKEY = cl.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858e9b5623763201562d5936521be0') cl
+ON c.external_id = cl.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS loyalty_points
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8587c25a1d762c015a1d9d62710b04') lp
-ON c.ENCODEDKEY = lp.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858eda5a1930fd015a1dfb679e3561') lp
+ON c.external_id = lp.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS onefi_score
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a85872e5cd1117a015cd1fde56e0694') ofs
-ON c.ENCODEDKEY = ofs.PARENTKEY
+	WHERE CUSTOMFIELDKEY = '8a858f585cf9d48b015cffb32c3867ed') ofs
+ON c.external_id = ofs.PARENTKEY
 LEFT JOIN (SELECT
 		PARENTKEY,
 		"VALUE" AS jasmine_score
 	FROM customfieldvalue
-	WHERE CUSTOMFIELDKEY = '8a8586ab5f58ff13015f6dc7825e1435') js
-ON c.ENCODEDKEY = js.PARENTKEY;
+	WHERE CUSTOMFIELDKEY = '8a858fcb5f61e3dc015f6dc5bbc31074') js
+ON c.external_id = js.PARENTKEY
+on conflict(client_id) do nothing;
 
 -- Client Scores end
-
-		
