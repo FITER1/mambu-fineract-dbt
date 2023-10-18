@@ -40,7 +40,7 @@ SELECT
     CASE WHEN cf2."VALUE"= 'TRUE' THEN '1'::bit ELSE '0'::bit END,
     cf3."VALUE"::decimal(22,2),
     cf4."VALUE"::decimal(22,2),
-     (SELECT id FROM m_code_value WHERE LOWER(code_value) = LOWER(cf5."VALUE") AND code_id = 82)::int4,
+     (SELECT id FROM m_code_value WHERE LOWER(code_value) = LOWER(cf5."VALUE") AND code_id = 105)::int4,
     cf6."VALUE",
     cf7."VALUE",
     cf8."VALUE",

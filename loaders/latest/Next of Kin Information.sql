@@ -29,7 +29,7 @@ INSERT INTO public."Next of Kin Information" (
 SELECT 
     m_client.id AS client_id,
    (SELECT id FROM m_code_value WHERE LOWER(code_value) = LOWER(cf_state."VALUE") AND code_id = 27)::int4 AS "State of Residence",
-    (SELECT id FROM m_code_value WHERE LOWER(code_value) = LOWER(cf_relationship."VALUE") AND code_id = 31)::int4 AS "Next of Kin Relationship",
+    (SELECT id FROM m_code_value WHERE LOWER(code_value) = LOWER(cf_relationship."VALUE") AND code_id = 104)::int4 AS "Next of Kin Relationship",
     cf_lga."VALUE" AS "Local Government Area - NOK",
     cf_phone."VALUE" AS "Next of Kin Phone Number",
     cf_address1."VALUE" AS "Next of Kin Address1",
