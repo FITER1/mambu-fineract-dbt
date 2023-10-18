@@ -42,7 +42,7 @@ SELECT
     cf12."VALUE",
     REPLACE(cf13."VALUE", ',', '')::numeric(19,2),
     cf14."VALUE",
-    REPLACE(cf15."VALUE", ',', '')::numeric(19,2),
+    REPLACE(cf15."VALUE", ',', '')::numeric(22,2),
     cf16."VALUE",
     REPLACE(cf17."VALUE", ',', '')::numeric(19,2),
     REPLACE(cf18."VALUE", ',', '')::numeric(5,2),

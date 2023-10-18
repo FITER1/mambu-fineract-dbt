@@ -25,6 +25,6 @@ FROM
     LEFT JOIN customfieldvalue AS cf_advance_fee ON m_savings_account.external_id = cf_advance_fee.parentkey AND cf_advance_fee.customfieldkey = '8a858ed457e2e6960157e6cdb57f1bf3'
     -- Joining and mapping for "Advance Partner"
     LEFT JOIN customfieldvalue AS cf_advance_partner ON m_savings_account.external_id = cf_advance_partner.parentkey AND cf_advance_partner.customfieldkey = '8a858ed457e2e6960157e6d3617d1d68'
-    LEFT JOIN m_code_value mc ON cf_advance_partner."VALUE" = mc.code_value AND mc.code_id = 61
+    LEFT JOIN m_code_value mc ON LOWER(cf_advance_partner."VALUE") = LOWER(mc.code_value) AND mc.code_id = 61
     on conflict(savings_account_id) do nothing;
 
