@@ -23,14 +23,14 @@ SELECT
     (SELECT id FROM m_code_value WHERE LOWER(code_value) = LOWER(cf_account_type."VALUE") AND code_id = 55)::int4,
     cf_bvn."VALUE",
     cf_card_issuing_bank."VALUE",
-    cf_card_expiry."VALUE",
+    TO_DATE(cf_card_expiry."VALUE", 'YYYY-MM-DD'),
     cf_masked_card_pan."VALUE",
     cf_payment_setup_url."VALUE",
     cf_payment_service_provider."VALUE",
     cf_wallet_account_id."VALUE",
     m_client.submittedon_date,
     m_client.submittedon_date,
-    CASE WHEN cf_immediate_withdrawals."VALUE" = 'TRUE' THEN 1 ELSE 0 END,
+    CASE WHEN cf_immediate_withdrawals."VALUE" = 'TRUE' THEN '1'::bit ELSE '0'::bit END,
     cf_bank_code."VALUE",
     cf_bank_branch."VALUE"
 FROM m_client
@@ -47,4 +47,19 @@ LEFT JOIN customfieldvalue cf_wallet_account_id ON m_client.external_id = cf_wal
 LEFT JOIN customfieldvalue cf_immediate_withdrawals ON m_client.external_id = cf_immediate_withdrawals.parentkey AND cf_immediate_withdrawals.customfieldkey = '8a81891452d1db190152d4fa93935364'
 LEFT JOIN customfieldvalue cf_bank_code ON m_client.external_id = cf_bank_code.parentkey AND cf_bank_code.customfieldkey = '8a25921045fd49cc0145fec1fa7e14fc'
 LEFT JOIN customfieldvalue cf_bank_branch ON m_client.external_id = cf_bank_branch.parentkey AND cf_bank_branch.customfieldkey = '8a6b840a4202095c0142040efbe64896'
-on conflict(client_id) do nothing;
+on conflict(client_id) DO UPDATE SET
+    "Account Number" = EXCLUDED."Account Number",
+    "Bank_Name_Clients_cd_Bank Name" = EXCLUDED."Bank_Name_Clients_cd_Bank Name",
+    "bank_account_type_cd_Account Type" = EXCLUDED."bank_account_type_cd_Account Type",
+    "BVN" = EXCLUDED."BVN",
+    "Card Issuing Bank" = EXCLUDED."Card Issuing Bank",
+    "Card Expiry" = EXCLUDED."Card Expiry",
+    "Masked Card PAN" = EXCLUDED."Masked Card PAN",
+    "Payment Setup URL" = EXCLUDED."Payment Setup URL",
+    "Payment Service Provider" = EXCLUDED."Payment Service Provider",
+    "Wallet Account ID" = EXCLUDED."Wallet Account ID",
+    created_at = EXCLUDED.created_at,
+    updated_at = EXCLUDED.updated_at,
+    "Immediate Withdrawals" = EXCLUDED."Immediate Withdrawals",
+    "Bank Code" = EXCLUDED."Bank Code",
+    "Bank Branch" = EXCLUDED."Bank Branch";

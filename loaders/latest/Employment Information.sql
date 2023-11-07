@@ -1,32 +1,37 @@
+    
 INSERT INTO public."Employment Information"
 (
-    client_id, 
-    "employment_type_cd_Employment Status",
-    "Employer",
-    "Date of Employment",
-    "Net Pay",
-    "Pay Date",
-    "State",
-    "Name of Business",
-    "Business Start Date",
-    created_at,
-    updated_at,
-    "Contract Expiry Date",
-    "Verification Number",
-    "Number of Employers in the last five years",
-    "Office Address",
-    "Employee Number",
-    "Employer Industry",
-    "Office Address2",
-    "Local Government Area",
-    "Job Title Position"
+            client_id, 
+            "employment_type_cd_Employment Status",
+            "Employer",
+            "Date of Employment",
+            "Net Pay",
+            "Pay Date",
+            "State",
+             "Name of Business",
+            "Business Start Date",
+            created_at,
+            updated_at,
+            "Contract Expiry Date",
+            "Verification Number",
+            "Number of Employers in the last five years",
+            "Office Address",
+            "Employee Number",
+            "Employer Industry",
+            "Office Address2",
+            "Local Government Area",
+            "Job Title Position"
 )
 SELECT 
     c.id,
     (SELECT cv1.id FROM m_code_value cv1 WHERE cv1.code_id = 89 AND LOWER(cv1.code_value) = LOWER(cf1."VALUE")),
     cf2."VALUE",
     cf3."VALUE"::date,
-    cf4."VALUE"::decimal(22,2),
+--    cf4."VALUE"::decimal(22,2),
+     CASE
+                WHEN cf4."VALUE"::numeric < 10^20 AND cf4."VALUE"::numeric > -10^20 THEN cf4."VALUE"::decimal(22,2)
+                                ELSE NULL 
+                                            END,
     cf5."VALUE"::date,
     (SELECT cv2.id FROM m_code_value cv2 WHERE cv2.code_id = 27 AND LOWER(cv2.code_value) = LOWER(cf6."VALUE")),
     cf7."VALUE",
@@ -34,8 +39,17 @@ SELECT
     c.submittedon_date,
     c.submittedon_date,
     cf9."VALUE"::date,
-    cf10."VALUE"::bigint,
-    cf11."VALUE"::int,
+        CASE
+                    WHEN cf10."VALUE" ~ '^\d+$' THEN cf10."VALUE"::bigint
+                            ELSE NULL 
+                        END,
+        CASE
+    WHEN cf11."VALUE" ~ '^\d+$' THEN cf11."VALUE"::bigint
+    ELSE NULL 
+END,
+
+    --cf10."VALUE"::bigint,
+   -- cf11."VALUE"::bigint,
     cf12."VALUE",
     cf13."VALUE",
     cf14."VALUE",
@@ -62,7 +76,3 @@ FROM
     LEFT JOIN customfieldvalue cf16 ON cf16.parentkey = c.external_id AND cf16.customfieldkey = '8a858e65582a517e0158404f592c63ec'
     LEFT JOIN customfieldvalue cf17 ON cf17.parentkey = c.external_id AND cf17.customfieldkey = '8a5ced2443e0bf990143e2eba4a9253d'
     on conflict (client_id) do nothing;
-
-
---psql:Employment Information.sql:64: ERROR:  numeric field overflow
---DETAIL:  A field with precision 19, scale 2 must round to an absolute value less than 10^17.
